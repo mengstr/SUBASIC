@@ -121,34 +121,31 @@ PrintHex:
         POP @val
         PUSH @t                         ; Push the return address back onto the stack
 
-        JNEZ @val @valIsNotZero         ; If the value is zero, print it and return
-        OUT ASCII_0                     ; Print ASCII zero
-        OUT ASCII_0                     ; Print ASCII zero
-        OUT ASCII_0                     ; Print ASCII zero
-        OUT ASCII_0                     ; Print ASCII zero
-        OUT ASCII_0                     ; Print ASCII zero
-        OUT ASCII_0                     ; Print ASCII zero
-        RET                             ; All done already, return             
-
-@valIsNotZero:  
 ; 
 ; We will print the number by subtracting the largest possible power of 16 from the number
 ; and printing the number of times we can subtract it. This process is repeated for all
 ; smaller powers of 16 until we have printed all digits.
 ;
 
+
 @startprint:    MOV CONST_6 @digitCnt           ; Number of digits to print
                 MOV POW16_ADDR @pow16addr       ; Initialize the pointer to the POW10 array
+
+                JNEG @val @valIsNeg            ; Check if the value is negative
+                JMP @digitsLoop                 ; If it is positive, print it as is
+@valIsNeg:      @mega8 @val
+                MOV ASCII_8 @digit              ; Initialize counter to ASCII eight so we don't need to convert it later
+                JMP @l1
 
 @digitsLoop:    MOV ASCII_0 @digit              ; Initialize counter to ASCII zero so we don't need to convert it later
 @l1:            MOV @val @lastPosVal
 @pow16addr:     0 @val @l2                      ; Subtract from val, and branch if reached zero or negative
-@NotNeg:         INC @digit                      ; We still have more to subtract, so increment the counter
+@NotNeg:        INC @digit                      ; We still have more to subtract, so increment the counter
                 JMP @l1
 
 @l2:            JEQZ @val @NotNeg               ; If T is not negative yet then we are not done, so continue subtracting
-@print:         JLT @digit ASCII_9+1 @print1       ; If the digit is less than 10, print it as is
-                ADD CONST_7 @digit        ; Otherwise, convert it to a letter
+@print:         JLT @digit ASCII_9+1 @print1    ; If the digit is less than 10, print it as is
+                ADD CONST_7 @digit              ; Otherwise, convert it to a letter
 @print1:        OUT @digit                      ; Print the digit
                 MOV @lastPosVal @val            ; Restore the value of val
                 INC @pow16addr                  ; Move to the next smaller power of 10
@@ -156,11 +153,22 @@ PrintHex:
                 Z @digitCnt @done               ; If we have printed all digits, we are done
                 JMP @digitsLoop                 ; Otherwise, continue with the next digit
 
+@val8k:       
+                OUT ASCII_8                     ; Print ASCII eight
+                OUT ASCII_0                     ; Print ASCII zero
+                OUT ASCII_0                     ; Print ASCII zero
+                OUT ASCII_AT                    ; Print ASCII zero
+                OUT ASCII_0                     ; Print ASCII zero
+                OUT ASCII_0                     ; Print ASCII zero
+
+
 @done:          RET
 
 @digitCnt:      .data 0                         ; Number of digits to print
 @digit:         .data 0                         ; ASCII digit to be printed
 @lastPosVal:    .data 0                         ; Last positive value of val, sp it can be restored when we're counted up enough
+@mega8:         .data 0x800000
+@dum            .data 0
         .endp
 
 

@@ -12,8 +12,8 @@ ls macrotests | grep .sleq | sed 's/.sleq//' | while read line; do
     fi
 
     result=$(   \
-        ./sleasm.js macrotests/$line.sleq && \
-        ./subleq.js macrotests/$line.v20raw -q | \
+        ../SLEQASM/sleqasm.js macrotests/$line.sleq 0 && \
+        ../SLEQASM/subleq.js macrotests/$line.v20raw -q | \
         tr -d '\n' | \
         tr -d '\r' \
     )
@@ -25,7 +25,5 @@ ls macrotests | grep .sleq | sed 's/.sleq//' | while read line; do
         echo -e "\tExpected \'$expected\'"
         echo -e "\tBut got  \'$result\'"
     fi
-
 done
-
 

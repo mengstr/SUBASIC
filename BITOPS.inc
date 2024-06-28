@@ -13,7 +13,7 @@ AND:
         POP @numA
         PUSH @t                         ; Push the return address back onto the stack
 
-        CLR result
+        CLR bitopResult
         MOV CONST_24 @cnt
 @loop:
 
@@ -40,12 +40,12 @@ AND:
         JMP @isFalse                        ; For AND - is a bit is 0, then the result must be 0
 
 @isTrue:
-        ADD result result                   ; Left shift result
-        INC result                          ; And inset a 1
+        ADD bitopResult bitopResult                   ; Left shift result
+        INC bitopResult                          ; And inset a 1
         JMP @continue
 
 @isFalse:
-        ADD result result                   ; Left shift result
+        ADD bitopResult bitopResult                   ; Left shift result
 
 @continue:
         ADD @numA @numA                     ; Left shift numA
@@ -74,7 +74,7 @@ OR:
         POP @numA
         PUSH @t                         ; Push the return address back onto the stack
 
-        CLR result
+        CLR bitopResult
         MOV CONST_24 @cnt
 @loop:
 
@@ -101,12 +101,12 @@ OR:
         JMP @isFalse                        ; For OR - both A and B are 0, so the result is 0
 
 @isTrue:
-        ADD result result                   ; Left shift result
-        INC result                          ; And inset a 1
+        ADD bitopResult bitopResult                   ; Left shift result
+        INC bitopResult                          ; And inset a 1
         JMP @continue
 
 @isFalse:
-        ADD result result                   ; Left shift result
+        ADD bitopResult bitopResult                   ; Left shift result
 
 @continue:
         ADD @numA @numA                     ; Left shift numA
@@ -137,7 +137,7 @@ XOR:
         POP @numA
         PUSH @t                         ; Push the return address back onto the stack
 
-        CLR result
+        CLR bitopResult
         MOV CONST_24 @cnt
 @loop:
         CLR @v
@@ -165,12 +165,12 @@ XOR:
         JNEZ @v @isFalse
 
 @isTrue:
-        ADD result result                   ; Left shift result
-        INC result                          ; And inset a 1
+        ADD bitopResult bitopResult                   ; Left shift result
+        INC bitopResult                          ; And inset a 1
         JMP @continue
 
 @isFalse:
-        ADD result result                   ; Left shift result
+        ADD bitopResult bitopResult                   ; Left shift result
 
 @continue:
         ADD @numA @numA                     ; Left shift numA

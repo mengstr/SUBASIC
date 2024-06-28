@@ -293,3 +293,20 @@ NEW
 50 IF R<0 THEN LET R=0-R
 60 PRINT R
 70 GOTO 40
+
+
+NEW
+10 PRINT "17 + 5 = 22  We get ";17+5
+20 PRINT "17 - 5 = 12  We get ";17-5  
+30 PRINT "17 * 5 = 85  We get ";17*5     
+40 PRINT "17 / 5 = 3.4 We get ";17/5
+50 PRINT "17 & 5 = 1   We get ";17&5
+60 PRINT "17 | 5 = 21  We get ";17|5
+70 PRINT "17 ^ 5 = 20  We get ";17^5
+
+
+NEW
+10 FOR A=1 TO 10
+20 PRINT A;" ";
+30 IF A=5 THEN LET A=8
+40 NEXT

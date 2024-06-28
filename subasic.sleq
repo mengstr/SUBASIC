@@ -19,6 +19,8 @@ lineNo:         .data 0         ; The current line number executing
 offsetNextLine: .data 0         ; Offset to the next line
 addrNextLine:   .data 0         ; The computed address of the next line
 
+bitopResult:    .data 0         ; Result from bit operations
+
 program_:   .data program       ; program_ is a constant holding the address of the program array
 
 
@@ -198,6 +200,7 @@ msgInvalidTokenType:    .data $+1, "Invalid token type", 0
         .include PARSEEXPRESSION.inc
         .include GETTOKEN.inc
         .include VARIABLES.inc
+        .INCLUDE BITOPS.inc
         .include debug.inc
 
 

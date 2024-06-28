@@ -18,10 +18,14 @@ ParseExpression:
         JBETWEEN tokenPeek ASCII_z ASCII_z @peekOk
         JBETWEEN tokenPeek ASCII_0 ASCII_9 @peekOk
         CMPEQ tokenPeek ASCII_DOUBLEQUOTE @peekOk
-        CMPEQ tokenPeek ASCII_PLUS @peekOk
-        CMPEQ tokenPeek ASCII_MINUS @peekOk
-        CMPEQ tokenPeek ASCII_ASTERISK @peekOk
-        CMPEQ tokenPeek ASCII_SLASH @peekOk
+        CMPEQ tokenPeek ASCII_PLUS @peekOk              ; Operand + addition
+        CMPEQ tokenPeek ASCII_MINUS @peekOk             ; Operand - subtraction
+        CMPEQ tokenPeek ASCII_ASTERISK @peekOk          ; Operand * multiplication
+        CMPEQ tokenPeek ASCII_SLASH @peekOk             ; Operand / division
+        CMPEQ tokenPeek ASCII_VERTICAL_BAR @peekOk      ; Operand | OR
+        CMPEQ tokenPeek ASCII_AMPERSAND @peekOk         ; Operand & AND
+        CMPEQ tokenPeek ASCII_CARET @peekOk             ; Operand ^ XOR
+        
         RET
 
 @peekOk:
@@ -48,6 +52,9 @@ ParseExpression:
         CMPEQ tokenValue ASCII_MINUS @opOk
         CMPEQ tokenValue ASCII_ASTERISK @opOk
         CMPEQ tokenValue ASCII_SLASH @opOk
+        CMPEQ tokenValue ASCII_VERTICAL_BAR @opOk      ; Operand | OR
+        CMPEQ tokenValue ASCII_AMPERSAND @opOk         ; Operand & AND
+        CMPEQ tokenValue ASCII_CARET @opOk             ; Operand ^ XOR
         JMP @loop
 @opOk:
         MOV tokenValue @op
@@ -59,6 +66,9 @@ ParseExpression:
         CMPEQ @op ASCII_MINUS @subtraction
         CMPEQ @op ASCII_ASTERISK @multiplication
         CMPEQ @op ASCII_SLASH @division
+        CMPEQ @op ASCII_VERTICAL_BAR @or      ; Operand | OR
+        CMPEQ @op ASCII_AMPERSAND @and         ; Operand & AND
+        CMPEQ @op ASCII_CARET @xor             ; Operand ^ XOR
         MOV tokenValue expression
         JMP @loop
 
@@ -79,6 +89,30 @@ ParseExpression:
 
 @subtraction:
         SUB tokenValue expression
+        CLR @op
+        JMP @loop
+
+@or:
+        PUSH tokenValue
+        PUSH expression
+        CALL OR
+        MOV bitopResult expression
+        CLR @op
+        JMP @loop
+
+@and:
+        PUSH tokenValue
+        PUSH expression
+        CALL AND
+        MOV bitopResult expression
+        CLR @op
+        JMP @loop
+
+@xor:
+        PUSH tokenValue
+        PUSH expression
+        CALL XOR
+        MOV bitopResult expression
         CLR @op
         JMP @loop
 

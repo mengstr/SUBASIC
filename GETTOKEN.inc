@@ -224,6 +224,7 @@ keywords:   .data $+1
             .data kwNEW       + 1 
             .data kwRUN       + 1 
             .data kwINPUT     + 1 
+            .data kwPRHEX     + 1 
             0
 
 kwREM:      .data 1, "REM"   ,0
@@ -243,6 +244,7 @@ kwLIST:     .data 14, "LIST"  ,0
 kwNEW:      .data 15, "NEW"   ,0
 kwRUN:      .data 16, "RUN"   ,0
 kwINPUT:    .data 17, "INPUT" ,0
+kwPRHEX:    .data 18, "PRHEX" ,0
 
     .endp
 

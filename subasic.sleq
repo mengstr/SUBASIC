@@ -23,8 +23,8 @@ bitopResult:    .data 0         ; Result from bit operations
 
 program_:   .data program       ; program_ is a constant holding the address of the program array
 
-
-
+seed:            .data 0x555555   ; Seed for the random number generator
+rndVal:          .data 0          ; Random number generated
 
 ;-----------------------------------------------------------------------------
 ; START OF CODE
@@ -40,6 +40,15 @@ Start:
 ;-----------------------------------------------------------------------------
 ; COMMAND LINE PROMPT WITH RESETTING THE STACK AFTER ERROR
 ;-----------------------------------------------------------------------------
+
+Lupe:   PUSH CONST_10
+        CALL Random
+        PUSH rndVal
+        CALL PrintInteger
+;        PRINTCRLF
+        JMP Lupe
+
+
 
 Restart:
         MOV program_ pCode
@@ -128,6 +137,7 @@ notMisc:
         CMPEQ tokenValue kwFOR cmdFOR
         CMPEQ tokenValue kwNEXT cmdNEXT
         CMPEQ tokenValue kwINPUT cmdINPUT
+        CMPEQ tokenValue kwPRHEX cmdPRHEX
         JMP SyntaxError
 
 
@@ -144,7 +154,7 @@ msgLogo:
         .data "/__` |  | |__) |    |__  /  \\     |  | |\\ | \\ /    |__)  /\\  /__` | /  ` "       ,"\r\n"
         .data ".__/ \\__/ |__) |___ |___ \\__\\\\    |  | | \\|  |     |__) /--\\ .__/ | \\__, "       ,"\r\n"
         .data "\r\n"
-        .data "[[ version 0.01 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]\r\n", 0
+        .data "[[ version 0.02 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]\r\n", 0
         .data "\r\n"
         .data 0                                         
 
@@ -169,6 +179,7 @@ msgInvalidTokenType:    .data $+1, "Invalid token type", 0
 
         .include IO.inc
         .include STRING.inc
+        .include RANDOM.inc
         .include CONSTANTS.inc
         .include STACK.inc
 

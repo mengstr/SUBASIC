@@ -158,7 +158,7 @@ func evaluatePostfix(postfix []string) int {
 	return finalResult
 }
 
-func main() {
+func xmain() {
 	expression := "3*(1+1)-ABS(5-17)*12"
 	expression = "2*ABS 1"
 	postfix := infixToPostfix(expression)

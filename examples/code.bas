@@ -310,3 +310,55 @@ NEW
 20 PRINT A;" ";
 30 IF A=5 THEN LET A=8
 40 NEXT
+
+
+#
+#NextRandom():
+#    feedback = (state >> 23) ^ (state >> 22) ^ (state >> 21) ^ (state >> 16)
+#    feedback = feedback & 1  # Extract the least significant bit
+#    state = ((state << 1) | feedback) & 0xFFFFFF  # Shift left and insert feedback bit
+#    if state > 2^23 - 1:
+#        state = state - 2^24
+#    return state
+#
+# 78C29C  F18538  E30A70  C614E0  8C29C0  185381  30A702  614E05  C29C0B  853816
+#
+#feedback: 0 f23,f22,f21,f16: 1,0,1,0
+#feedback: 0 f23,f22,f21,f16: 0,1,1,0
+#feedback: 0 f23,f22,f21,f16: 1,1,1,1
+#feedback: 0 f23,f22,f21,f16: 1,1,1,1
+#feedback: 0 f23,f22,f21,f16: 1,1,0,0
+#feedback: 1 f23,f22,f21,f16: 1,0,0,0
+#feedback: 0 f23,f22,f21,f16: 0,0,0,0
+#feedback: 1 f23,f22,f21,f16: 0,0,1,0
+#feedback: 1 f23,f22,f21,f16: 0,1,1,1
+#feedback: 0 f23,f22,f21,f16: 1,1,0,0
+
+
+NEW
+1 REM Calculates a PRNG using a 24 bit LFSR
+2 REM having taps at bits 24,23,22,17. 
+3 REM
+4 REM R=Random value A-D=Tap bits, X-Z=XOR bits
+5 REM T=Temp value for simulated right shifts
+6 REM
+7 LET R=12345678
+8 FOR I=1 TO 10
+10 LET A=0 : LET B=0 : LET C=0 : LET D=0
+20 LET T=R
+30 IF T<0 THEN LET A=1
+40 LET T=T+T
+50 IF T<0 THEN LET B=1
+60 LET T=T+T
+70 IF T<0 THEN LET C=1
+80 LET T=T+T : LET T=T+T : LET T=T+T : LET T=T+T : LET T=T+T
+90 IF T<0 THEN LET D=1
+110 LET X=0 : LET Y=0 : LET Z=0
+120 IF A<>B THEN LET X=1
+130 IF C<>D THEN LET Y=1
+140 IF X<>Y THEN LET Z=1
+160 LET R=R+R+Z
+170 PRHEX R
+180 NEXT
+
+

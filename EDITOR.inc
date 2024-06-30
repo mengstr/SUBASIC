@@ -117,7 +117,7 @@ Editor:
         INDEXEDWR @ch pFound
         INC @t
         INC pFound
-        JNEZ @ch @loopIB
+        JMPN0 @ch @loopIB
 
 @done:
         JMP Prompt
@@ -160,14 +160,14 @@ DeleteBlock:
         INC @pS
         INC @pD
         DEC @cnt
-        JNEZ @cnt @delLoop
+        JMPN0 @cnt @delLoop
 
         MOV @delLen @cnt
 @fill0Loop:
         INDEXEDWR CONST_0 @pD
         INC @pD
         DEC @cnt
-        JNEZ @cnt @fill0Loop
+        JMPN0 @cnt @fill0Loop
 
         RET
     .endp
@@ -212,14 +212,14 @@ InsertBlock:
         DEC @pS
         DEC @pD
         DEC @cnt
-        JNEZ @cnt @insLoop
+        JMPN0 @cnt @insLoop
 
         MOV @insLen @cnt
 @fill0Loop:
         INDEXEDWR CONST_x555 @pD
         DEC @pD
         DEC @cnt
-        JNEZ @cnt @fill0Loop
+        JMPN0 @cnt @fill0Loop
 
         RET
     .endp

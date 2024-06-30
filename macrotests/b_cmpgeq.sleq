@@ -1,8 +1,9 @@
 ;# SCRIPT
-;for A in $(seq 1 1 100); do
-;    for B in $(seq 1 1 100); do
-;       C=$(( A / B ))
-;       echo -n $C"_"
+; Anums=(-8388608 -8388607 -8388606 -8388605 -4 -3 -2 -1 0 1 2 3 4 8388604 8388605  8388606  8388607)
+; Bnums=(-8388608 -8388607 -8388606 -8388605 -4 -3 -2 -1 0 1 2 3 4 8388604 8388605  8388606  8388607)
+; for A in "${Anums[@]}"; do
+;   for B in "${Bnums[@]}"; do
+;        if (( A >= B )); then echo -n "T"; else echo -n "f"; fi
 ;    done
 ;done
 ;# END
@@ -13,26 +14,41 @@ Z:      .data 0
 PLUS1:  .data 1 
 MINUS1: .data (-1)
 
-; JGT A B addr - Jump if A is greater than B
+; CMPGEQ A B addr - Jump if A >= B
 
         MOV stack_ SP                              ; Initialize the stack pointer
+        MOV TESTNUMS_ p1
 
-        MOV P1 A
-loop1:  MOV P1 B
-loop2:  MOV A T
-        DIVU B T
-        PUSH T
-        CALL PrintInteger
-        OUT ASCII_UNDERSCORE
-incs:   ADD P1 B
-        MOV B T
-        P100 T loop2
-done1:  ADD P1 A
-        MOV A T
-        P100 T loop1
+loop1:  INDEXEDRD p1 v1
+        CMPEQ CONST_END v1 done1
+        MOV TESTNUMS_ p2
+loop2:  INDEXEDRD p2 v2
+        CMPEQ CONST_END v2 done2
 
-        PRINTCRLF
+        CMPGEQ v1 v2 ok
+
+        OUT ASCII_f
+        JMP cont
+ok:     OUT ASCII_T
+
+cont:   INC p2
+        JMP loop2
+
+done2:  INC p1
+        JMP loop1
+
+done1:  PRINTCRLF
         HALT
+
+CONST_END:  .data 0x650318
+TESTNUMS_:  .data TESTNUMS
+TESTNUMS:   .data -8388608,-8388607,-8388606,-8388605,-4,-3,-2,-1,0,1,2,3,4,8388604,8388605,8388606,8388607
+            .data 0x650318
+
+p1:          .data 0
+v1:          .data 0
+p2:          .data 0
+v2:          .data 0
 
 P1:         .data 1
 P2:         .data 2
@@ -41,8 +57,6 @@ P4:         .data 4
 P5:         .data 5
 P6:         .data 6
 P10:        .data 10
-P17:        .data 17
-P20:        .data 20
 P100:       .data 100
 P1000:      .data 1000
 P10000:     .data 10000
@@ -62,14 +76,17 @@ M10000:     .data -10000
 M100000:    .data -100000
 M1000000:   .data -1000000
 
+
 A:          .data 0              ; test variable
 B:          .data 0              ; test variable
 T:          .data 0
-
 tmpA:       .data 0             ;Used by macros
 tmpB:       .data 0             ;Used by macros
 tmpC:       .data 0             ;Used by macros
 
+
         .include IO.inc
         .include CONSTANTS.inc
         .include STACK.inc
+
+

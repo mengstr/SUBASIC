@@ -1,4 +1,4 @@
-;# XSCRIPT
+;# SCRIPT
 ; echo "01000"
 ;# END
 
@@ -25,38 +25,37 @@ Start:
         PUSH S
         PUSH S1
         CALL CompareString   
-        PUSH val
+        PUSH compResult
         CALL PrintInteger
 
         PUSH S
         PUSH S2
         CALL CompareString   
-        PUSH val
+        PUSH compResult
         CALL PrintInteger
 
         PUSH S
         PUSH S3
         CALL CompareString   
-        PUSH val
+        PUSH compResult
         CALL PrintInteger
 
         PUSH S
         PUSH S4
         CALL CompareString   
-        PUSH val
+        PUSH compResult
         CALL PrintInteger
 
         PUSH S
         PUSH S5
         CALL CompareString   
-        PUSH val
+        PUSH compResult
         CALL PrintInteger
 
         PRINTCRLF
         HALT
 
-val_:       .data val
-val:        .data 0
+compResult:        .data 0
 
 A:          .data 0              ; test variable
 B:          .data 0              ; test variable

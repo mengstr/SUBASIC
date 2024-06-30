@@ -1,33 +1,3 @@
-    .proc ATOI
-
-@p:         .data 0  ; Pointer to the string to convert
-@t:         .data 0  ; Temporary hold variable
-@digit:     .data 0
-
-ATOI:
-    POP @t              ; Pop off the return address and parameters
-    POP @p
-    PUSH @t             ; Push the return address back onto the stack
-
-    CLR atoiVal
-
-@loop:
-    INDEXEDRD @p @digit
-    JBETWEEN @digit ASCII_0 ASCII_9 @valid ; If the character is not a digit, we are done
-    RET
-
-@valid:
-    ASCII_0 @digit              ; Make the ascii digit to a number
-    MULU CONST_10 atoiVal          ; Collect the digit into the result
-    ADD @digit atoiVal
-
-    INC @p                      ; Point to the next character
-    JMP @loop                   ; Loop back and continue processing digits
-
-    .endp
-
-
-
     .proc CompareString
 @t:     .data 0
 @s1:    .data 0
@@ -47,8 +17,8 @@ CompareString:
     INDEXEDRD @s1 @ch1
     INDEXEDRD @s2 @ch2
     CMPNE @ch1 @ch2 @fail
-    JNEZ @ch1 @next
-    JNEZ @ch2 @next
+    JMPN0 @ch1 @next
+    JMPN0 @ch2 @next
     INC compResult
     RET
 
@@ -90,8 +60,8 @@ CompareStringIgnoreCase:
 @uc4:   
 
         CMPNE @ch1 @ch2 @fail
-        JNEZ @ch1 @next
-        JNEZ @ch2 @next
+        JMPN0 @ch1 @next
+        JMPN0 @ch2 @next
         INC compResult
         RET
 

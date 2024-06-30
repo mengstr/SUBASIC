@@ -1,8 +1,14 @@
 ;# SCRIPT
 ; Anums=(-8388608 -8388607 -8388606 -8388605 -4 -3 -2 -1 0 1 2 3 4 8388604 8388605  8388606  8388607)
+; Bnums=(-8388608 -8388607 -8388606 -8388605 -4 -3 -2 -1 0 1 2 3 4 8388604 8388605  8388606  8388607)
+; Cnums=(-8388608 -8388607 -8388606 -8388605 -4 -3 -2 -1 0 1 2 3 4 8388604 8388605  8388606  8388607)
 ; for A in "${Anums[@]}"; do
-;    printf "%06X " "$((A & 0xFFFFFF))"
-; done
+;   for B in "${Bnums[@]}"; do
+;     for C in "${Cnums[@]}"; do
+;        if (( A >= B && A <= C )); then echo -n "T"; else echo -n "f"; fi
+;      done
+;    done
+;  done
 ;# END
 
         .include MACROS.inc
@@ -11,37 +17,61 @@ Z:      .data 0
 PLUS1:  .data 1 
 MINUS1: .data (-1)
 
+; CMPNE A B addr - Jump if the two operands are not equal
 
-; Test printing of hex numbers
 
         MOV stack_ SP                              ; Initialize the stack pointer
-        MOV TESTNUMS_ p
+        MOV TESTNUMS_ p1
 
-loop:   INDEXEDRD p v
-        CMPEQ CONST_END v done
+loop1:  INDEXEDRD p1 v1
+        CMPEQ CONST_END v1 done1
 
-        PUSH v
-        CALL PrintHex
-        OUT ASCII_SPACE
+        MOV TESTNUMS_ p2
+loop2:  INDEXEDRD p2 v2
+        CMPEQ CONST_END v2 done2
 
-        INC p
-        JMP loop
+        MOV TESTNUMS_ p3
+loop3:  INDEXEDRD p3 v3
+        CMPEQ CONST_END v3 done3
 
-done:   PRINTCRLF
+        JBETWEEN v1 v2 v3 ok
+
+        OUT ASCII_f
+        JMP cont
+ok:     OUT ASCII_T
+
+cont:   INC p3
+        JMP loop3
+
+done3:  INC p2
+        JMP loop2
+
+done2:  INC p1
+        JMP loop1
+
+done1:  PRINTCRLF
         HALT
+
 
 CONST_END:  .data 0x650318
 TESTNUMS_:  .data TESTNUMS
 TESTNUMS:   .data -8388608,-8388607,-8388606,-8388605,-4,-3,-2,-1,0,1,2,3,4,8388604,8388605,8388606,8388607
             .data 0x650318
 
-p:              .data 0
-v:              .data 0
+p1:          .data 0
+v1:          .data 0
+p2:          .data 0
+v2:          .data 0
+p3:          .data 0
+v3:          .data 0
 
 
 P1:         .data 1
 P2:         .data 2
 P3:         .data 3
+P4:         .data 4
+P5:         .data 5
+P6:         .data 6
 P10:        .data 10
 P100:       .data 100
 P1000:      .data 1000
@@ -52,12 +82,16 @@ ZERO:       .data 0
 M1:         .data -1
 M2:         .data -2
 M3:         .data -3
+M4:         .data -4
+M5:         .data -5
+M6:         .data -6
 M10:        .data -10
 M100:       .data -100
 M1000:      .data -1000
 M10000:     .data -10000
 M100000:    .data -100000
 M1000000:   .data -1000000
+
 
 A:          .data 0              ; test variable
 B:          .data 0              ; test variable
@@ -69,4 +103,3 @@ tmpC:       .data 0             ;Used by macros
         .include IO.inc
         .include CONSTANTS.inc
         .include STACK.inc
-

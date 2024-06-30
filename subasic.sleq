@@ -23,7 +23,7 @@ bitopResult:    .data 0         ; Result from bit operations
 
 program_:   .data program       ; program_ is a constant holding the address of the program array
 
-seed:            .data 0x555555   ; Seed for the random number generator
+seed:            .data 0x1   ; Seed for the first random number generator
 rndVal:          .data 0          ; Random number generated
 
 ;-----------------------------------------------------------------------------
@@ -41,14 +41,20 @@ Start:
 ; COMMAND LINE PROMPT WITH RESETTING THE STACK AFTER ERROR
 ;-----------------------------------------------------------------------------
 
-Lupe:   PUSH CONST_10
-        CALL Random
-        PUSH rndVal
-        CALL PrintInteger
-;        PRINTCRLF
-        JMP Lupe
+Lupe:   
 
+        MOV minint myA        ; tmpA=-8388608 0x80000
+        CLR myB            ; tmpB=0
+        myA myB 
 
+        PUSH myB
+        CALL PrintHex
+        PRINTCRLF
+        HALT
+
+minint: .data -8388608
+myA:    .data 0
+myB:    .data 0
 
 Restart:
         MOV program_ pCode
@@ -102,7 +108,7 @@ ProgramLine:
 
         CLR tokenType                       ; Clear the token type so we don't trigger the EOL check in the loop
         INDEXEDRD pCode lineNo           ; Get Linenumber of current line as a binary value
-        JEQZ lineNo cmdEND                  ; If we reach the end of the code it's an implicit END instruction
+        JMP0 lineNo cmdEND                  ; If we reach the end of the code it's an implicit END instruction
         INC pCode
 
         INDEXEDRD pCode offsetNextLine   ; Get offset to next line
@@ -179,6 +185,7 @@ msgInvalidTokenType:    .data $+1, "Invalid token type", 0
 
         .include IO.inc
         .include STRING.inc
+        .include ATOI.inc
         .include RANDOM.inc
         .include CONSTANTS.inc
         .include STACK.inc

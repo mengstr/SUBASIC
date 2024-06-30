@@ -17,7 +17,7 @@ InputString:
 
 @loop:
         IN @ch                          ; Read a character from the keyboard
-        JNEG @ch @loop                  ; Continue looping until a character is read
+        JMPL0 @ch @loop                  ; Continue looping until a character is read
 
         CMPEQ @ch ASCII_CR @done        ; Exit the loop if the character is a carriage return
         CMPEQ @ch ASCII_DEL @delete     ; Remove character in buffer if delete or backspace is pressed

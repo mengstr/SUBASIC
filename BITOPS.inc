@@ -52,7 +52,7 @@ AND:
         ADD @numB @numB                     ; Left shift numB
 
         DEC @cnt                            ; Loop until cnt = 0
-        JNEZ @cnt @loop                         
+        JMPN0 @cnt @loop                         
 
         RET
 
@@ -113,7 +113,7 @@ OR:
         ADD @numB @numB                     ; Left shift numB
 
         DEC @cnt                            ; Loop until cnt = 0
-        JNEZ @cnt @loop                         
+        JMPN0 @cnt @loop                         
 
         RET
 
@@ -162,7 +162,7 @@ XOR:
 @B0bit:
 
         DEC @v
-        JNEZ @v @isFalse
+        JMPN0 @v @isFalse
 
 @isTrue:
         ADD bitopResult bitopResult                   ; Left shift result
@@ -177,7 +177,7 @@ XOR:
         ADD @numB @numB                     ; Left shift numB
 
         DEC @cnt                            ; Loop until cnt = 0
-        JNEZ @cnt @loop                         
+        JMPN0 @cnt @loop                         
 
         RET
 

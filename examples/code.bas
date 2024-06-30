@@ -342,8 +342,8 @@ NEW
 4 REM R=Random value A-D=Tap bits, X-Z=XOR bits
 5 REM T=Temp value for simulated right shifts
 6 REM
-7 LET R=12345678
-8 FOR I=1 TO 10
+7 LET R=1
+8 FOR I=1 TO 30
 10 LET A=0 : LET B=0 : LET C=0 : LET D=0
 20 LET T=R
 30 IF T<0 THEN LET A=1
@@ -353,6 +353,7 @@ NEW
 70 IF T<0 THEN LET C=1
 80 LET T=T+T : LET T=T+T : LET T=T+T : LET T=T+T : LET T=T+T
 90 IF T<0 THEN LET D=1
+95 REM PRINT A;" ";B;" ";C;" ";D
 110 LET X=0 : LET Y=0 : LET Z=0
 120 IF A<>B THEN LET X=1
 130 IF C<>D THEN LET Y=1

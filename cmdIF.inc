@@ -28,11 +28,11 @@ cmdIF:        .proc cmdIF
        JMP @skip
 
 @notEq:CMPNE @cmp ASCII_GREATER @notGt
-       JGT @var1 @var2 @true
+       CMPGE @var1 @var2 @true
        JMP @skip
 
 @notGt:CMPNE @cmp ASCII_LESS @notLe
-       JLT @var1 @var2 @true
+       CMPLE @var1 @var2 @true
        JMP @skip
 
 @notLe:CMPNE @cmp ASCII_DOUBLEDAGGER @notDi

@@ -3,7 +3,7 @@
 ; Bnums=(0x000000 0x00000F 0xF00000 0xFFFFFF 0x555555 0xAAAAAA)
 ; for B in "${Bnums[@]}"; do
 ;   for A in "${Anums[@]}"; do
-;     printf "%06X " "$((A ^ B))"
+;     printf "%06X " "$((A | B))"
 ;   done
 ; done
 ; echo ""
@@ -12,144 +12,144 @@
 
     .include MACROS.inc
 
-    .macro testXOR num
+    .macro testOR num
         PUSH CONST_5393303 
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_12559298
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_1703788 
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_12424365
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_11622155
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_14923334
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_15408390
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_9085095 
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_14787526
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_4565281 
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_2288085 
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_15545218
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_176857  
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_13767412
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_14691199
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_13452486
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_5716230 
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_10696868
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_10770738
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
 
         PUSH CONST_4608131 
         PUSH num
-        CALL XOR
-        PUSH result
+        CALL OR
+        PUSH bitopResult
         CALL PrintHex
         OUT ASCII_SPACE
     .endm
@@ -163,18 +163,18 @@ MINUS1:     .data (-1)
 
         MOV stack_ SP                              ; Initialize the stack pointer
 
-        testXOR CONST_x000000 
-        testXOR CONST_x00000F 
-        testXOR CONST_xF00000 
-        testXOR CONST_xFFFFFF 
-        testXOR CONST_x555555 
-        testXOR CONST_xAAAAAA
+        testOR CONST_x000000 
+        testOR CONST_x00000F 
+        testOR CONST_xF00000 
+        testOR CONST_xFFFFFF 
+        testOR CONST_x555555 
+        testOR CONST_xAAAAAA
 
         PRINTCRLF
         HALT
 
 
-result:     .data 0
+bitopResult:     .data 0
 tmpA:       .data 0             ;Used by macros
 tmpB:       .data 0             ;Used by macros
 tmpC:       .data 0             ;Used by macros

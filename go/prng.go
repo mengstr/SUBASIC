@@ -1,115 +1,57 @@
-// package main
-
-// import (
-//     "fmt"
-//     "math/rand"
-//     "time"
-// )
-
-// // Function to calculate the greatest common divisor using the Euclidean algorithm
-// func gcd(a, b uint32) uint32 {
-//     for b != 0 {
-//         a, b = b, a%b
-//     }
-//     return a
-// }
-
-// // Function to check if a number is co-prime with 2^24
-// func isCoprimeWithModulus(increment uint32) bool {
-//     const modulus uint32 = 1 << 24
-//     return gcd(increment, modulus) == 1
-// }
-
-// func main() {
-//     rand.Seed(time.Now().UnixNano())
-//     const modulus uint32 = 1 << 24
-
-//     for {
-//         increment := uint32(rand.Int31n(int32(modulus)))
-//         if isCoprimeWithModulus(increment) {
-//             fmt.Printf("Found a good increment: %d\n", increment)
-//             break
-//         }
-//     }
-// }
-
-
-// ent: 556987
-// mats@Matss-MacBook-Pro go % go run prng.go
-// Found a good increment: 11329711
-// mats@Matss-MacBook-Pro go % go run prng.go
-// Found a good increment: 13400971
-// mats@Matss-MacBook-Pro go % go run prng.go
-// Found a good increment: 14548843
-// mats@Matss-MacBook-Pro go % go run prng.go
-// Found a good increment: 11301903
-// mats@Matss-MacBook-Pro go % go run prng.go
-// Found a good increment: 2202643
-
-
 package main
 
 import (
     "fmt"
 )
 
-// Function to calculate the greatest common divisor using the Euclidean algorithm
-func gcd(a, b uint32) uint32 {
-    for b != 0 {
-        a, b = b, a%b
-    }
-    return a
+type LFSR struct {
+    state uint32
 }
 
-// Function to check if a number is co-prime with 2^24
-func isCoprimeWithModulus(increment uint32) bool {
-    const modulus uint32 = 1 << 24
-    return gcd(increment, modulus) == 1
+func NewLFSR(seed uint32) *LFSR {
+    return &LFSR{state: seed & 0xFFFFFF} // Ensure the seed is 24-bit
 }
 
-// Additive Congruential Generator structure
-type ACG struct {
-    state     uint32
-    increment uint32
-}
+func (l *LFSR) NextRandom() int32 {
+    // Compute the feedback bit using the specified tap positions
+	f23:=(l.state >> 23)&1
+    f22:=(l.state >> 22)&1
+    f21:=(l.state >> 21)&1
+    f16:=(l.state >> 16)&1
+	feedback := ((l.state >> 23) ^ (l.state >> 22) ^ (l.state >> 21) ^ (l.state >> 16)) & 1
+	f:=f23^f22^f21^f16
+	_=f
+	//
 
-// Function to create a new ACG instance
-func NewACG(seed uint32, increment uint32) *ACG {
-    return &ACG{state: seed, increment: increment}
-}
 
-// Function to generate the next random number
-func (a *ACG) NextRandom() uint32 {
-    a.state = (a.state + a.increment) & 0xFFFFFF // Ensure the state is within 24 bits
-    return a.state
-}
+	// fmt.Printf("feedback: %d/%d  f23,f22,f21,f16: %d,%d,%d,%d\n",feedback,f, f23,f22,f21,f16)
 
-// Function to generate a sequence of random numbers
-func GenerateSequence(seed uint32, increment uint32, length int) []uint32 {
-    acg := NewACG(seed, increment)
-    sequence := make([]uint32, length)
-    for i := 0; i < length; i++ {
-        sequence[i] = acg.NextRandom()
-    }
-    return sequence
+    // Shift the state left by 1 bit and insert the feedback bit at the least significant bit position
+    l.state = ((l.state << 1) | feedback) & 0xFFFFFF // Ensure the state is within 24 bits
+
+    // // Adjust the state to stay within the range of 24-bit signed integers
+    // if l.state > 0x7FFFFF {
+    //     return int32(l.state) - 0x1000000
+    // }
+	if l.state > 0xFFFFFF {
+		l.state = l.state - 0x1000000
+	}
+
+		return int32(l.state)
 }
 
 func main() {
-    seed := uint32(12345678)
-    increment := uint32(11301903)
+    seed := uint32(1)
+    lfsr := NewLFSR(seed)
+	first:=lfsr.NextRandom()
 
-    // Check if the chosen increment is valid
-    if !isCoprimeWithModulus(increment) {
-        fmt.Println("The chosen increment is not co-prime with the modulus. Please choose another increment.")
-        return
-    }
-
-    length := 100
-    randomSequence := GenerateSequence(seed, increment, length)
-
-    fmt.Println("Random sequence:")
-    for _, num := range randomSequence {
-        fmt.Printf("%024b\n", num)
-    }
+	for i:=0; i<1000; i++ {
+		num := lfsr.NextRandom()
+		fmt.Printf("%06X\r\n", num)
+		if num == first {
+			fmt.Printf("Cycle detected after %d iterations\n", i)
+			break
+		}
+	}
 }
 

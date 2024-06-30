@@ -170,12 +170,12 @@ GetParsedToken:
             MOV keywords @k                     ; If we are here, then it is a keyword or a variable
 @loopKw:    
             INDEXEDRD @k @p
-            JEQZ @p @notAKeyword                ; If we reached the end of the keyword table, then it is not a keyword
+            JMP0 @p @notAKeyword                ; If we reached the end of the keyword table, then it is not a keyword
 
             PUSH @p                             ; Compare the token with the current keyword from the table
             PUSH tokenStr
             CALL CompareStringIgnoreCase
-            JNEZ compResult @isKeyword
+            JMPN0 compResult @isKeyword
 
             INC @k                              ; Nope, try the next keyword
             INC tokenValue

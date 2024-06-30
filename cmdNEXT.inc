@@ -14,7 +14,7 @@ cmdNEXT:        .proc cmdNEXT
         INC @value
         INDEXEDWR @value @var6
 
-        JGT @value @var5 @done
+        CMPGE @value @var5 @done
 
         PUSH @var6                                ; Push the variable address
         PUSH @var5                                ; Push the end value

@@ -1,41 +1,42 @@
 ;# SCRIPT
-;for A in $(seq -6 6); do
-;    for B in $(seq -6 6); do
-;        if (( A > B )); then
-;            echo -n "X"
-;        else
-;            echo -n "."
-;        fi
-;    done
-;done
-; echo ""
+; Anums=(-8388608 -8388607 -8388606 -8388605 -4 -3 -2 -1 0 1 2 3 4 8388604 8388605  8388606  8388607)
+; for A in "${Anums[@]}"; do
+;    if (( A >= 0 )); then echo -n "T"; else echo -n "f"; fi
+; done
 ;# END
 
         .include MACROS.inc
-
         .org 0
+Z:      .data 0 
+PLUS1:  .data 1 
+MINUS1: .data (-1)
 
-Z:          .data 0 
-PLUS1:      .data 1 
-MINUS1:     .data (-1)
+; JMPGE0 - Jump if A is greater than or zero
 
-; JGT A B addr - Jump if A is greater than B
+        MOV stack_ SP                              ; Initialize the stack pointer
+        MOV TESTNUMS_ p
 
-        MOV M6 A
-loop1:  MOV M6 B
-loop2:  JGT A B ok
-        OUT ASCII_DOT
+loop:   INDEXEDRD p v
+        CMPEQ CONST_END v done
+        JMPGE0 v ok
+        OUT ASCII_f
         JMP incs
-ok:     OUT ASCII_X
-incs:   INC B
-        MOV B T
-        P6 T loop2
-done1:  INC A
-        MOV A T
-        P6 T loop1
+ok:     OUT ASCII_T
+incs:   INC p
+        JMP loop
 
-        PRINTCRLF
+done:   PRINTCRLF
         HALT
+
+CONST_END:  .data 0x650318
+TESTNUMS_:  .data TESTNUMS
+TESTNUMS:   .data -8388608,-8388607,-8388606,-8388605,-4,-3,-2,-1,0,1,2,3,4,8388604,8388605,8388606,8388607
+            .data 0x650318
+
+p:              .data 0
+v:              .data 0
+
+
 
 P1:         .data 1
 P2:         .data 2
@@ -63,6 +64,8 @@ M10000:     .data -10000
 M100000:    .data -100000
 M1000000:   .data -1000000
 
+
+
 A:          .data 0              ; test variable
 B:          .data 0              ; test variable
 T:          .data 0
@@ -73,3 +76,4 @@ tmpC:       .data 0             ;Used by macros
         .include IO.inc
         .include CONSTANTS.inc
         .include STACK.inc
+

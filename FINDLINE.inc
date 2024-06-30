@@ -16,7 +16,7 @@ FindLine:
 
 @loop:
         INDEXEDRD @p @lineNo            ; Get Linenumber of current line as a binary value
-        JEQZ @lineNo @notFound          ; If we reach the end of the program, the line was not found
+        JMP0 @lineNo @notFound          ; If we reach the end of the program, the line was not found
         INC @p
     
         INDEXEDRD @p offsetNextLine     ; Get offset to next line

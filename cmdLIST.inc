@@ -12,7 +12,7 @@ cmdLIST:        .proc cmdLIST
 @loop1: 
         INDEXEDRD @p @lineNo                ; Get Linenumber of current line as a binary value
         INC @p
-        JEQZ @lineNo @done                  ; Reached the end of the code?
+        JMP0 @lineNo @done                  ; Reached the end of the code?
 
         PUSH @lineNo                        ; Print the line number and a space
         CALL PrintInteger
@@ -23,7 +23,7 @@ cmdLIST:        .proc cmdLIST
 @loop2:
         INDEXEDRD @p @ch                    ; Get Linenumber of current line as a binary value
         INC @p
-        JEQZ @ch @eol                       ; Reached the end of the line?
+        JMP0 @ch @eol                       ; Reached the end of the line?
         OUT @ch                             ; Print the character
         JMP @loop2      
 

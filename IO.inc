@@ -18,7 +18,7 @@ PrintInteger:
 ;       For positive values, carry on as normal
 ;
 
-        JNEZ @val @valIsNotZero         ; If the value is zero, print it and return
+        JMPN0 @val @valIsNotZero         ; If the value is zero, print it and return
         OUT ASCII_0                     ; Print ASCII zero
         RET                             ; All done already, return             
 
@@ -51,7 +51,7 @@ PrintInteger:
                 DEC @blanking                   ; Mark zeroFlag to start printing
                 JMP @l1
 
-@l2:            JEQZ @val @NotNeg                  ; If T is not negative yet then we are not done, so continue subtracting
+@l2:            JMP0 @val @NotNeg                  ; If T is not negative yet then we are not done, so continue subtracting
                 Z @blanking @print
                 JMP @noPrint
 
@@ -85,7 +85,7 @@ PrintString:
     PUSH @t             ; Push the return address back onto the stack
 @loop:
     INDEXEDRD @p @t     ; Get the next character
-    JEQZ @t @stop       ; If it's a null terminator, we're done
+    JMP0 @t @stop       ; If it's a null terminator, we're done
     OUT @t              ; Otherwise, print the character
     INC @p              ; Move to the next character
     JMP @loop           ; Repeat
@@ -131,7 +131,7 @@ PrintHex:
 @startprint:    MOV CONST_6 @digitCnt           ; Number of digits to print
                 MOV POW16_ADDR @pow16addr       ; Initialize the pointer to the POW10 array
 
-                JNEG @val @valIsNeg            ; Check if the value is negative
+                JMPL0 @val @valIsNeg            ; Check if the value is negative
                 JMP @digitsLoop                 ; If it is positive, print it as is
 @valIsNeg:      @mega8 @val
                 MOV ASCII_8 @digit              ; Initialize counter to ASCII eight so we don't need to convert it later
@@ -143,8 +143,8 @@ PrintHex:
 @NotNeg:        INC @digit                      ; We still have more to subtract, so increment the counter
                 JMP @l1
 
-@l2:            JEQZ @val @NotNeg               ; If T is not negative yet then we are not done, so continue subtracting
-@print:         JLT @digit ASCII_9+1 @print1    ; If the digit is less than 10, print it as is
+@l2:            JMP0 @val @NotNeg               ; If T is not negative yet then we are not done, so continue subtracting
+@print:         CMPLE @digit ASCII_9+1 @print1    ; If the digit is less than 10, print it as is
                 ADD CONST_7 @digit              ; Otherwise, convert it to a letter
 @print1:        OUT @digit                      ; Print the digit
                 MOV @lastPosVal @val            ; Restore the value of val

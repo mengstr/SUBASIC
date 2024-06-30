@@ -1,6 +1,8 @@
                 .include MACROS.inc
 
-; E.XPECT 8388605_8388606_8388607_-8388608_-8388607_-8388606
+;# SCRIPT
+; echo "8388605 7FFFFD;8388606 7FFFFE;8388607 7FFFFF;-8388608 800000;-8388607 800001;-8388606 800002"
+;# END
 
             .org 0
 
@@ -15,27 +17,55 @@ MINUS1:     .data (-1)
 
         PUSH OVERFLOW
         CALL PrintInteger
-        OUT ASCII_SEMICOLON
-        INC OVERFLOW
+        OUT ASCII_SPACE
         PUSH OVERFLOW
-        CALL PrintInteger
+        CALL PrintHex
         OUT ASCII_SEMICOLON
-        INC OVERFLOW
-        PUSH OVERFLOW
-        CALL PrintInteger
 
         INC OVERFLOW
-        PUSH OVERFLOW
-        CALL PrintInteger
-        OUT ASCII_SEMICOLON
-        INC OVERFLOW
-        PUSH OVERFLOW
-        CALL PrintInteger
-        OUT ASCII_SEMICOLON
-        INC OVERFLOW
-        PUSH OVERFLOW
-        CALL PrintInteger
 
+        PUSH OVERFLOW
+        CALL PrintInteger
+        OUT ASCII_SPACE
+        PUSH OVERFLOW
+        CALL PrintHex
+        OUT ASCII_SEMICOLON
+
+        INC OVERFLOW
+
+        PUSH OVERFLOW
+        CALL PrintInteger
+        OUT ASCII_SPACE
+        PUSH OVERFLOW
+        CALL PrintHex
+        OUT ASCII_SEMICOLON
+
+        INC OVERFLOW
+
+        PUSH OVERFLOW
+        CALL PrintInteger
+        OUT ASCII_SPACE
+        PUSH OVERFLOW
+        CALL PrintHex
+        OUT ASCII_SEMICOLON
+
+        INC OVERFLOW
+
+        PUSH OVERFLOW
+        CALL PrintInteger
+        OUT ASCII_SPACE
+        PUSH OVERFLOW
+        CALL PrintHex
+        OUT ASCII_SEMICOLON
+
+        INC OVERFLOW
+
+        PUSH OVERFLOW
+        CALL PrintInteger
+        OUT ASCII_SPACE
+        PUSH OVERFLOW
+        CALL PrintHex
+        
         PRINTCRLF
         HALT
 

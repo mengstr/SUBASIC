@@ -23,8 +23,11 @@ bitopResult:    .data 0         ; Result from bit operations
 
 program_:   .data program       ; program_ is a constant holding the address of the program array
 
-seed:            .data 0x1   ; Seed for the first random number generator
+seed:            .data 0x1        ; Seed for the first random number generator
 rndVal:          .data 0          ; Random number generated
+
+mu1:            .data 0
+mu2:            .data 0
 
 ;-----------------------------------------------------------------------------
 ; START OF CODE
@@ -37,24 +40,18 @@ Start:
         CALL PrintString
         DEBUGPRINT "[Debug mode enabled]\r\n"
 
+
+;Lupe:
+;        PUSH CONST_10
+;        CALL Prng ; Random
+;        PUSH seed
+;        CALL PrintHex
+;        PRINTCRLF
+;        JMP Lupe        
+
 ;-----------------------------------------------------------------------------
 ; COMMAND LINE PROMPT WITH RESETTING THE STACK AFTER ERROR
 ;-----------------------------------------------------------------------------
-
-Lupe:   
-
-        MOV minint myA        ; tmpA=-8388608 0x80000
-        CLR myB            ; tmpB=0
-        myA myB 
-
-        PUSH myB
-        CALL PrintHex
-        PRINTCRLF
-        HALT
-
-minint: .data -8388608
-myA:    .data 0
-myB:    .data 0
 
 Restart:
         MOV program_ pCode

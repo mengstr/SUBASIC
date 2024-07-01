@@ -13,20 +13,34 @@
 
 ;--------------------------------------------------------------------------------------------
 
-    .macro MULU a b       ; Unsigned multiply a by b and store in b;
-        ; MACRO START - MULU        
-        MOV a tmpA
-        MOV b tmpB
-        CLR b
-        INC   tmpA
-@loop:  CONST_1 tmpA @done         ; Subtract until aC <= 0
-        ; Add a to b
-        tmpB Z
-        Z b
-        JMP @loop
+    .macro MULU a b      ; Unsigned multiply a by b and store in b;
+        CLR @result
+        MOV a @aa
+
+        MOV CONST_23 @cnt
+@loop:
+        JMPGE0 @aa @skip
+        ADD b @result
+@skip:
+        ADD @aa @aa
+        ADD @result @result
+        DEC @cnt
+        JMPG0 @cnt @loop
+
+        JMPGE0 @aa @skip1
+        ADD b @result
+@skip1:
+
+        JMP @done
+
+@result:    .data 0
+@aa:        .data 0
+@cnt:       .data 0
+
 @done:
-        ; MACRO END - MULU
+        MOV @result b
     .endm
+
 
 ;--------------------------------------------------------------------------------------------
 

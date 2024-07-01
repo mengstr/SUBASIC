@@ -23,6 +23,8 @@ CONST_100000:       .data 100000
 CONST_1000000:      .data 1000000
 
 CONST_15            .data 15
+CONST_22            .data 22
+CONST_23            .data 23
 CONST_24            .data 24
 CONST_32:           .data 32
 CONST_x555:         .data 0x555

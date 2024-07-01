@@ -4,9 +4,6 @@
 ; 78C29C  F18538  E30A70  C614E0  8C29C0  185381  30A702  614E05  C29C0B  853816
 ;
 
-addSeed: .data 0x123456
-incSeed: .data 0xFFFFFF
-
 Prng:
 ; 10 LET A=0 : LET B=0 : LET C=0 : LET D=0
         CLR @a
@@ -90,12 +87,6 @@ Random:
         MOV CONST_4 @cnt
 
         CALL Prng
-        ; PUSH seed
-        ; CALL PrintHex
-        ; OUT ASCII_SPACE
-        ADD addSeed seed
-        ADD incSeed addSeed
-
         MOV seed @r
         CLR rndVal
 @loop:
@@ -108,10 +99,6 @@ Random:
         JMP @loop
 
 @done:
-        ; PUSH rndVal
-        ; CALL PrintHex
-        ; PRINTCRLF
-
         CMPLEQ @max rndVal @try
         RET
 

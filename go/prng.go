@@ -41,16 +41,18 @@ func (l *LFSR) NextRandom() int32 {
 }
 
 func main() {
-    seed := uint32(1)
-    lfsr := NewLFSR(seed)
-	first:=lfsr.NextRandom()
+    seed1 := uint32(192831)
+    seed2 := uint32(123123)
+    lfsr1 := NewLFSR(seed1)
+    lfsr2 := NewLFSR(seed2)
 
-	for i:=0; i<1000; i++ {
-		num := lfsr.NextRandom()
-		fmt.Printf("%06X\r\n", num)
-		if num == first {
-			fmt.Printf("Cycle detected after %d iterations\n", i)
-			break
+	for i:=0; i<100000; i++ {
+		num1 := lfsr1.NextRandom()
+		num2 := lfsr2.NextRandom()
+		num := num1 | num2
+		num=(num>>18)&15;
+		if num<10 {
+		fmt.Printf("%d ", num)
 		}
 	}
 }

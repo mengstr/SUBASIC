@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./clean.sh
+
 if [ $# -eq 1 ]; then
   test_name=$1
 else

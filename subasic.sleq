@@ -26,6 +26,8 @@ program_:   .data program       ; program_ is a constant holding the address of 
 seed:            .data 0x1        ; Seed for the first random number generator
 rndVal:          .data 0          ; Random number generated
 
+divRemaninder:  .data 0          ; Remainder from DIV operation to be used for modulus operations
+
 mu1:            .data 0
 mu2:            .data 0
 
@@ -39,6 +41,7 @@ Start:
         PUSH msgLogo
         CALL PrintString
         DEBUGPRINT "[Debug mode enabled]\r\n"
+
 
 
 ;Lupe:

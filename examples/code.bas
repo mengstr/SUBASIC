@@ -303,6 +303,7 @@ NEW
 50 PRINT "17 & 5 = 1   We get ";17&5
 60 PRINT "17 | 5 = 21  We get ";17|5
 70 PRINT "17 ^ 5 = 20  We get ";17^5
+80 PRINT "17 % 5 = 2   We get ";17%5
 
 
 NEW

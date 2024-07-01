@@ -25,6 +25,7 @@ ParseExpression:
         CMPEQ tokenPeek ASCII_VERTICAL_BAR @peekOk      ; Operand | OR
         CMPEQ tokenPeek ASCII_AMPERSAND @peekOk         ; Operand & AND
         CMPEQ tokenPeek ASCII_CARET @peekOk             ; Operand ^ XOR
+        CMPEQ tokenPeek ASCII_PERCENT @peekOk           ; Operand % MODULUS
         
         RET
 
@@ -55,6 +56,7 @@ ParseExpression:
         CMPEQ tokenValue ASCII_VERTICAL_BAR @opOk      ; Operand | OR
         CMPEQ tokenValue ASCII_AMPERSAND @opOk         ; Operand & AND
         CMPEQ tokenValue ASCII_CARET @opOk             ; Operand ^ XOR
+        CMPEQ tokenValue ASCII_PERCENT @opOk           ; Operand % MODULUS
         JMP @loop
 @opOk:
         MOV tokenValue @op
@@ -66,9 +68,10 @@ ParseExpression:
         CMPEQ @op ASCII_MINUS @subtraction
         CMPEQ @op ASCII_ASTERISK @multiplication
         CMPEQ @op ASCII_SLASH @division
-        CMPEQ @op ASCII_VERTICAL_BAR @or      ; Operand | OR
+        CMPEQ @op ASCII_VERTICAL_BAR @or       ; Operand | OR
         CMPEQ @op ASCII_AMPERSAND @and         ; Operand & AND
         CMPEQ @op ASCII_CARET @xor             ; Operand ^ XOR
+        CMPEQ @op ASCII_PERCENT @modulus    ; Operand % MODULUS
         MOV tokenValue expression
         JMP @loop
 
@@ -91,6 +94,14 @@ ParseExpression:
         SUB tokenValue expression
         CLR @op
         JMP @loop
+
+@modulus
+        MOV expression @tmp
+        DIVU tokenValue @tmp
+        MOV divRemainder expression
+        CLR @op
+        JMP @loop
+
 
 @or:
         PUSH tokenValue
@@ -117,5 +128,6 @@ ParseExpression:
         JMP @loop
 
 @pCodeHold: .data 0                     ; To back up to the previous token when required
+@tmp:       .data 0
 
     .endp

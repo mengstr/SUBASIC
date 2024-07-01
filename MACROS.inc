@@ -146,7 +146,7 @@
 
 @done:
     MOV @quotient b
-    MOV @remainder divRemaninder
+    MOV @remainder divRemainder
     .endm
 
 ;--------------------------------------------------------------------------------------------

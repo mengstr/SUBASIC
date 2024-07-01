@@ -81,12 +81,12 @@ ParseExpression:
         JMP @loop
 
 @multiplication:
-        MULU tokenValue expression
+        MUL tokenValue expression
         CLR @op
         JMP @loop
 
 @division
-        DIVU tokenValue expression
+        DIV tokenValue expression
         CLR @op
         JMP @loop
 
@@ -97,7 +97,7 @@ ParseExpression:
 
 @modulus
         MOV expression @tmp
-        DIVU tokenValue @tmp
+        DIV tokenValue @tmp
         MOV divRemainder expression
         CLR @op
         JMP @loop

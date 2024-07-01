@@ -130,7 +130,7 @@ GetParsedToken:
 @number:    INDEXEDWR ch pTokenStr               ; Append digit to string
             INC pTokenStr
 
-            MULU CONST_10 tokenValue           ; Compute the current number collected do far
+            MUL CONST_10 tokenValue           ; Compute the current number collected do far
             ADD ch tokenValue
             SUB ASCII_0 tokenValue
 

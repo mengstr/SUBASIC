@@ -1,8 +1,8 @@
 ;# SCRIPT
 ; Anums=(200 15467 17404 82553 93163 18039 2829089)
 ; Bnums=(1 2 3 10 13 100 214 396 515 644 1000 6821 22639 88888)
-; for A in "${Anums[@]}"; do
-;   for B in "${Bnums[@]}"; do
+; for B in "${Bnums[@]}"; do
+;   for A in "${Anums[@]}"; do
 ;       C=$(( A / B ))
 ;       echo -n $C" "
 ;    done
@@ -15,30 +15,31 @@ Z:      .data 0
 PLUS1:  .data 1 
 MINUS1: .data (-1)
 
-; DIV a a 
+; DIV a b
 
         MOV stack_ SP                              ; Initialize the stack pointer
 
-        MOV TESTNUMS1_ p1
-loop1:  INDEXEDRD p1 v1
-        CMPEQ CONST_END v1 done1
 
         MOV TESTNUMS2_ p2
 loop2:  INDEXEDRD p2 v2
         CMPEQ CONST_END v2 done2
 
-        DIV v1 v2
-        PUSH v2
+        MOV TESTNUMS1_ p1
+loop1:  INDEXEDRD p1 v1
+        CMPEQ CONST_END v1 done1
+
+        DIV v2 v1
+        PUSH v1
         CALL PrintInteger
         OUT ASCII_SPACE
 
-cont:   INC p2
-        JMP loop2
-
-done2:  INC p1
+cont:   INC p1
         JMP loop1
 
-done1:  PRINTCRLF
+done1:  INC p2
+        JMP loop2
+
+done2:  PRINTCRLF
         HALT
 
 CONST_END:  .data 0x650318
@@ -51,7 +52,7 @@ TESTNUMS2_:  .data TESTNUMS2
 TESTNUMS2:   .data 1,2,3,10,13,100,214,396,515,644,1000,6821,22639,88888
              .data 0x650318
 
-
+divRemainder:  .data 0          ; Remainder from DIV operation to be used for modulus operations
 p1:          .data 0
 v1:          .data 0
 p2:          .data 0

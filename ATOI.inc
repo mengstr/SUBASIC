@@ -18,7 +18,7 @@ ATOI:
 
 @valid:
     ASCII_0 @digit              ; Make the ascii digit to a number
-    MULU CONST_10 atoiVal          ; Collect the digit into the result
+    MUL CONST_10 atoiVal          ; Collect the digit into the result
     ADD @digit atoiVal
 
     INC @p                      ; Point to the next character

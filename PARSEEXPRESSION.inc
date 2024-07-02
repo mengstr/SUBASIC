@@ -9,9 +9,9 @@ expression:     .data 0
 @op:            .data 0
 
 ParseExpression:
-;        DEBUGPRINT "ParseExpression\r\n" ;debug
         CLR expression
         CLR @op
+        CLR @unaryFlag
 
 @loop:
         JBETWEEN tokenPeek ASCII_A ASCII_Z @peekOk
@@ -49,21 +49,34 @@ ParseExpression:
 
 
 @isOp:
-        CMPEQ tokenValue ASCII_PLUS @opOk
-        CMPEQ tokenValue ASCII_MINUS @opOk
-        CMPEQ tokenValue ASCII_ASTERISK @opOk
-        CMPEQ tokenValue ASCII_SLASH @opOk
+        CMPEQ tokenValue ASCII_MINUS @testUnary        ;Operand - subtraction
+        CMPEQ tokenValue ASCII_PLUS @opOk              ; Operand + addition
+        CMPEQ tokenValue ASCII_ASTERISK @opOk          ; Operand * multiplication
+        CMPEQ tokenValue ASCII_SLASH @opOk             ; Operand / division
         CMPEQ tokenValue ASCII_VERTICAL_BAR @opOk      ; Operand | OR
         CMPEQ tokenValue ASCII_AMPERSAND @opOk         ; Operand & AND
         CMPEQ tokenValue ASCII_CARET @opOk             ; Operand ^ XOR
         CMPEQ tokenValue ASCII_PERCENT @opOk           ; Operand % MODULUS
         JMP @loop
+
+; If the previous token was an operand then this is a unary operator
+@testUnary:
+        JMP0 @op @opOk         
+        INC @unaryFlag
+        JMP @loop
+
 @opOk:
         MOV tokenValue @op
         JMP @loop
 
+
+
 @isNum:
 @isVar:
+        JMP0 @unaryFlag @notUnary      ; If we are in unary mode then negate the value
+        NEG tokenValue
+        CLR @unaryFlag
+@notUnary:
         CMPEQ @op ASCII_PLUS @addition
         CMPEQ @op ASCII_MINUS @subtraction
         CMPEQ @op ASCII_ASTERISK @multiplication
@@ -127,6 +140,7 @@ ParseExpression:
         CLR @op
         JMP @loop
 
+@unaryFlag: .data 0
 @pCodeHold: .data 0                     ; To back up to the previous token when required
 @tmp:       .data 0
 

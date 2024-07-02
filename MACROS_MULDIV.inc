@@ -136,20 +136,25 @@
         TOGGLE01 @sign
 @bIsPos:
 
-        CLR @quotient                       ;    uint32_t quotient = 0;
-        MOV @bb @remainder                    ;    uint32_t remainder = abs_dividend;
-        MOV @aa @temp_divisor                 ;    uint32_t temp_divisor = abs_divisor;
-        MOV CONST_1 @shifted_one            ;    uint32_t shifted_one = 1;
+    ; Check if the divisor is zero, then return MAXINT
+        JMP0 @aa @divZero
+
+; Else start the division
+
+        CLR @quotient                      ;    uint32_t quotient = 0;
+        MOV @bb @remainder                 ;    uint32_t remainder = abs_dividend;
+        MOV @aa @temp_divisor              ;    uint32_t temp_divisor = abs_divisor;
+        MOV CONST_1 @shifted_one           ;    uint32_t shifted_one = 1;
 
 @loop1: 
-        CMPLE @remainder @aa @skip1          ; while (remainder >= abs_divisor) {
-        MOV @aa @temp_divisor               ;   temp_divisor = abs_divisor;
+        CMPLE @remainder @aa @skip1        ; while (remainder >= abs_divisor) {
+        MOV @aa @temp_divisor              ;   temp_divisor = abs_divisor;
         MOV CONST_1 @shifted_one           ;   shifted_one = 1;
-
 @loop2:                                     
         MOV @temp_divisor @t               ;   t=temp_divisor
         ADD @t @t                          ;   t = t << 1
         CMPGE @t @remainder @skip2         ;   while ((temp_divisor << 1) <= remainder) {
+        JMPL0 @t @skip2
         ADD @temp_divisor @temp_divisor    ;            temp_divisor <<= 1;
         ADD @shifted_one @shifted_one      ;            shifted_one <<= 1;
         JMP @loop2                         ;  }
@@ -170,6 +175,12 @@
 @shifted_one:       .data 0
 @sign:              .data 0
 @t:                 .data 0
+
+@divZero:
+        PUSH msgDivZeroError
+        CALL PrintString
+        JMP Restart
+
 
 @done:
         MOV @quotient b

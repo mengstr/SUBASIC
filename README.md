@@ -1,3 +1,5 @@
+# SUBLEQ TINY BASIC
+
 ```
  __        __        ___  __     ___                __        __     __  
 /__` |  | |__) |    |__  /  \     |  | |\ | \ /    |__)  /\  /__` | /  ` 
@@ -5,7 +7,7 @@
 [[ version 0.03 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]
 ```
 
-This is an Tiny BASIC interpreter written in SUBLEQ assembly.
+This is an Tiny BASIC interpreter written in SUBLEQ assembly. It's working and can run fairly complex programs but is still a work in progress.
 
 The source requires my own SUBLEQ macro assembler ```SLEQASM``` to assemble into
 code. 

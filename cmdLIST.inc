@@ -1,18 +1,29 @@
+        .proc LIST
 ;-----------------------------------------------------------------------------
-cmdLIST:        .proc cmdLIST
+PromptLIST:
 ;-----------------------------------------------------------------------------
-;
-; List the BASIC program code
-;
-;-------|-----------------------------------|-------------------------------------
+        MOV program_ @p                     ; Assume list to start from the beginning
+        MOV CONST_MAXINT @lastLineNo        ; Assume list to end of the program
 
-        MOV program_ @p                     ; Point to start of source code
-        PRINTCRLF
+        CALL GetParsedToken                 ; Get the line number to start listing from
+        JMP0 tokenValue @loop1             ; If not given, list all lines
+        MOV tokenValue @lastLineNo         ; If we have a start lineNo then assume it's also the last
+        PUSH tokenValue                     ; Find the line number
+        CALL FindLine
+        MOV pFound @p                       ; And start from there
+
+        JMP0 tokenPeek @loop1             ; If the last line number is not given, list all lines
+
+        CALL GetParsedToken                 ;  Get the last line number to list
+        JMPL0 tokenValue @loop1            ; If not given, list all lines
+        MOV tokenValue @lastLineNo
+
 
 @loop1: 
         INDEXEDRD @p @lineNo                ; Get Linenumber of current line as a binary value
         INC @p
         JMP0 @lineNo @done                  ; Reached the end of the code?
+        CMPGE @lineNo @lastLineNo @done     ; Is this line number greater than the last line number?
 
         PUSH @lineNo                        ; Print the line number and a space
         CALL PrintInteger
@@ -32,21 +43,12 @@ cmdLIST:        .proc cmdLIST
         JMP @loop1
 
 @done:
-        RET
+        JMP Restart
 
 @p:             .data 0                     ; Pointer to current location in the program
 @lineNo:        .data 0                     ; Line number;
+@lastLineNo:    .data 0                     ; Last line number to list
 @ch:            .data 0                     ; Tempporary storage for the character
 
-    .endp
-
-
-
-
-;-----------------------------------------------------------------------------
-PromptLIST:
-;-----------------------------------------------------------------------------
-        CALL cmdLIST
-        JMP Restart
-
+        .endp
 

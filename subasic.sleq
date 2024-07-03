@@ -95,6 +95,9 @@ SyntaxError:
 
         PUSH msgSyntaxError
         CALL PrintString
+        PUSH lineNo
+        CALL PrintInteger
+        PRINTCRLF
         JMP Restart
 
 ;-----------------------------------------------------------------------------
@@ -146,7 +149,6 @@ notMisc:
         CMPEQ tokenValue kwLET cmdLET
         CMPEQ tokenValue kwGOSUB cmdGOSUB
         CMPEQ tokenValue kwRETURN cmdRETURN
-        CMPEQ tokenValue kwLIST cmdLIST
         CMPEQ tokenValue kwIF cmdIF
         CMPEQ tokenValue kwFOR cmdFOR
         CMPEQ tokenValue kwNEXT cmdNEXT
@@ -168,7 +170,7 @@ msgLogo:
         .data "/__` |  | |__) |    |__  /  \\     |  | |\\ | \\ /    |__)  /\\  /__` | /  ` "       ,"\r\n"
         .data ".__/ \\__/ |__) |___ |___ \\__\\\\    |  | | \\|  |     |__) /--\\ .__/ | \\__, "       ,"\r\n"
         .data "\r\n"
-        .data "[[ version 0.03 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]\r\n", 0
+        .data "[[ version 0.04 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]\r\n", 0
         .data "\r\n"
         .data 0                                         
 
@@ -176,7 +178,7 @@ msgHaltedByEnd:         .data $+1, "\r\n", 0
 ;msgHaltedByEnd:         .data $+1, "\r\nExecution halted by END\r\n", 0
 msgEndOfFile:           .data $+1, "\r\nExecution halted by End Of File\r\n", 0
 msgLineNotFound:        .data $+1, "\r\nLine not found\r\n", 0
-msgSyntaxError:         .data $+1, "\r\nSyntax error\r\n", 0
+msgSyntaxError:         .data $+1, "\r\nSyntax error in line ", 0
 msgUnknownCommand:      .data $+1, "Unknown command", 0
 msgInvalidToken:        .data $+1, "Invalid token,0
 msgInvalidPrompt:       .data $+1, "Invalid command",0
@@ -239,8 +241,8 @@ msgCtrlC:               .data $+1, "\r\n\r\nHalt by ^C\r\n", 0
 ;        .org 0x7000
 
 program:                                ; The program source code to be run
-;L10: .data 10, L20-$-1, "LET A=8123456/10"                            ,0      
-;L20: .data 20, Lend-$-1, "PRINT A:PRHEX A"                         ,0
+L10: .data 10, L20-$-1, "LET A=50+RND(100)+50"                     ,0      
+L20: .data 20, Lend-$-1, "PRINT A:PRHEX A"                         ,0
 
 ;        .include macrotests/testcasegen/multest.inc
 ;        .include macrotests/testcasegen/divtest.inc

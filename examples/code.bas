@@ -204,9 +204,9 @@ NEW
 
 
 10 REM Input year Y, month M, day D
-20 LET Y=1965 : REM INPUT "YEAR:", Y
-30 LET M=3    : REM INPUT "MONTH:", M
-40 LET D=18   : REM INPUT "DAY:", D
+20 INPUT "YEAR:"; Y
+30 INPUT "MONTH:"; M
+40 INPUT "DAY:"; D
 
 50 REM Adjust month and year for January and February
 60 IF M < 3 THEN LET M = M + 12
@@ -304,6 +304,7 @@ NEW
 60 PRINT "17 | 5 = 21  We get ";17|5
 70 PRINT "17 ^ 5 = 20  We get ";17^5
 80 PRINT "17 % 5 = 2   We get ";17%5
+90 GOTO 10
 
 
 NEW

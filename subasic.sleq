@@ -36,7 +36,6 @@ divRemainder:  .data 0          ; Remainder from DIV operation to be used for mo
 ;-----------------------------------------------------------------------------
 x: .data 0
 Start:
-
         MOV stack_ SP                              ; Initialize the stack pointer
 
         PUSH msgLogo
@@ -65,6 +64,7 @@ Start:
 ;-----------------------------------------------------------------------------
 
 Restart:
+        CTRLC x                                    ; Clear pending Ctrl-C
         MOV program_ pCode
         MOV stack_ SP                              ; Initialize the stack pointer
 
@@ -80,9 +80,6 @@ Prompt:
         MOV buf pCode
         CALL GetParsedToken
         CMPEQ tokenType CONST_0 Prompt          ; Empty line, prompt again
-
-;       PRINTCRLF                    ;debug
-;       CALL debugToken              ;debug
 
         CMPEQ tokenType CONST_1 Editor          ; Starts with a number, so it's an editor command
         PRINTCRLF
@@ -101,6 +98,14 @@ SyntaxError:
         JMP Restart
 
 ;-----------------------------------------------------------------------------
+ControlC:
+;-----------------------------------------------------------------------------
+
+        PUSH msgCtrlC
+        CALL PrintString
+        JMP Restart
+
+;-----------------------------------------------------------------------------
 PromptRUN:
 ;-----------------------------------------------------------------------------
         CALL GetParsedToken                       ; Get the line number to start running from
@@ -109,31 +114,27 @@ PromptRUN:
         MOV pFound pCode
 
 ProgramLine:
-;        PUSH pCode                      ;debug
-;        CALL PrintHex                      ;debug
-;        OUT ASCII_SPACE                     ;debug
-
-        CLR tokenType                       ; Clear the token type so we don't trigger the EOL check in the loop
-        INDEXEDRD pCode lineNo           ; Get Linenumber of current line as a binary value
-        JMP0 lineNo cmdEND                  ; If we reach the end of the code it's an implicit END instruction
+        CLR tokenType                           ; Clear the token type so we don't trigger the EOL check in the loop
+        INDEXEDRD pCode lineNo                  ; Get Linenumber of current line as a binary value
+        JMP0 lineNo cmdEND                      ; If we reach the end of the code it's an implicit END instruction
         INC pCode
 
-        INDEXEDRD pCode offsetNextLine   ; Get offset to next line
-        MOV pCode addrNextLine           ; Calculate the address of the next line by adding the offset to the current location
+        INDEXEDRD pCode offsetNextLine          ; Get offset to next line
+        MOV pCode addrNextLine                  ; Calculate the address of the next line by adding the offset to the current location
         ADD offsetNextLine addrNextLine     
         INC addrNextLine
 
         INC pCode
 
-;        CALL debugLine             ;debug
-
 Statement:
+        CTRLC x                             ; Check for Ctrl-C
+        JMPN0 x ControlC
+
         CALL GetParsedToken
-;       CALL debugToken             ;debug
 
         CMPEQ tokenType CONST_0 ProgramLine     ; End-Of-Line?
         CMPNE tokenType CONST_5 notMisc
-        CMPEQ tokenValue ASCII_COLON Statement   ; End-Of-Statement?
+        CMPEQ tokenValue ASCII_COLON Statement  ; End-Of-Statement?
         JMP SyntaxError        
 
 notMisc:
@@ -182,6 +183,7 @@ msgInvalidPrompt:       .data $+1, "Invalid command",0
 msgInvalidOperator:     .data $+1, "Invalid operator", 0
 msgInvalidTokenType:    .data $+1, "Invalid token type", 0
 msgDivZeroError:        .data $+1, "\r\nDivision by zero\r\n", 0
+msgCtrlC:               .data $+1, "\r\n\r\nHalt by ^C\r\n", 0
 
 ;-----------------------------------------------------------------------------
 ; INCLUDE FILES

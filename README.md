@@ -112,10 +112,10 @@ See the GOSUB for an example.
 IF checks two expressions to see if the specified condition is met. If so it will execute whatever comes after the `THEN` keyword on the same line. If the condition is not met then it will continue on the next line.
 
 The condition can be one of the following:
-* > (is larger than)
-* < (is less than)
-* = (is equal to)
-* <> (is not equal to)
+- `&gt;` (is larger than)
+- `&lt;` (is less than)
+- `=` (is equal to)
+- `&lt;&gt;` (is not equal to)
 
 #### Example
 ```

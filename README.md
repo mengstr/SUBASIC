@@ -16,7 +16,8 @@ To assemble the source code, you need to use my custom SUBLEQ macro assembler, S
 ## Features
 
 *Multi-statement Lines:* Multiple statements can be placed on a single line using a colon `:`.
-``` 10 PRINT "Hello" : PRINT "World"```
+
+```10 PRINT "Hello" : PRINT "World"```
 
 *Interrupt Handling:* When a program is running, it can be stopped by typing CTRL-C.
 

@@ -4,7 +4,7 @@
  __        __        ___  __     ___                __        __     __  
 /__` |  | |__) |    |__  /  \     |  | |\ | \ /    |__)  /\  /__` | /  ` 
 .__/ \__/ |__) |___ |___ \__\\    |  | | \|  |     |__) /--\ .__/ | \__, 
-[[ version 0.03 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]
+[[ version 0.05 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]
 ```
 
 This project is a Tiny BASIC interpreter written in SUBLEQ assembly. It is currently functional and capable of running fairly complex programs, although it is still a work in progress.
@@ -36,6 +36,15 @@ Displays the current BASIC code. If no lines numbers are given then show all lin
 ### RUN [lineNo]
 
 Starts execution of the program at the specified line number. If no line number is given, it will start at the first line. If the specified line does not exist, execution will start at the next higher number.
+
+## Functions
+
+### RND(max)
+Returns a random number between 0 and max-1. Currently the number can't be a fulle expression, only dingle number or variables are allowed.
+#### Example
+```
+10 LET A=100+RND(10) : REM Number between 100 and 109
+```
 
 ## BASIC Keywords
 
@@ -146,3 +155,4 @@ The NEXT statement is the companion to the FOR. See the FOR command for (pun int
 ## Change log
 
 `v0.04` LIST command can list parts of the source
+`v0.05` Implements rudimentary RND() function

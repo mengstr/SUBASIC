@@ -7,6 +7,7 @@
 
 expression:     .data 0
 @op:            .data 0
+@funcValue:     .data 0
 
 ParseExpression:
         CLR expression
@@ -44,9 +45,26 @@ ParseExpression:
         RET
 
 @isKeyword:
+        CMPEQ tokenValue kwRND @isRND
         MOV @pCodeHold pCode                    ; If the expression is terminated by a keyword we need to
         RET                                     ; roll back that keyword so it can be processsed properly.
 
+
+
+@isRND:
+        CALL GetParsedToken
+        CMPNE tokenValue ASCII_LEFT_PAREN SyntaxError
+
+        CALL GetParsedToken
+        PUSH tokenValue
+        CALL Random
+        MOV rndVal @funcValue
+
+        CALL GetParsedToken
+        CMPNE tokenValue ASCII_RIGHT_PAREN SyntaxError
+
+        MOV @funcValue tokenValue
+        JMP @isFunc
 
 @isOp:
         CMPEQ tokenValue ASCII_MINUS @testUnary        ;Operand - subtraction
@@ -73,6 +91,7 @@ ParseExpression:
 
 @isNum:
 @isVar:
+@isFunc:
         JMP0 @unaryFlag @notUnary      ; If we are in unary mode then negate the value
         NEG tokenValue
         CLR @unaryFlag

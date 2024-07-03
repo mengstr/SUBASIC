@@ -6,16 +6,16 @@ PromptLIST:
         MOV CONST_MAXINT @lastLineNo        ; Assume list to end of the program
 
         CALL GetParsedToken                 ; Get the line number to start listing from
-        JMP0 tokenValue @loop1             ; If not given, list all lines
-        MOV tokenValue @lastLineNo         ; If we have a start lineNo then assume it's also the last
+        JMP0 tokenValue @loop1              ; If not given, list all lines
+        MOV tokenValue @lastLineNo          ; If we have a start lineNo then assume it's also the last
         PUSH tokenValue                     ; Find the line number
         CALL FindLine
         MOV pFound @p                       ; And start from there
 
-        JMP0 tokenPeek @loop1             ; If the last line number is not given, list all lines
+        JMP0 tokenPeek @loop1               ; If the last line number is not given, list all lines
 
         CALL GetParsedToken                 ;  Get the last line number to list
-        JMPL0 tokenValue @loop1            ; If not given, list all lines
+        JMPL0 tokenValue @loop1             ; If not given, list all lines
         MOV tokenValue @lastLineNo
 
 

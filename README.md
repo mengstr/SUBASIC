@@ -11,8 +11,14 @@ The source requires my own SUBLEQ macro assembler ```SLEQASM``` to assemble into
 code. 
 
 I'm targeting this for the hardware implementation of a SUBLEQ machine I'm currently building so
-it requres a 24-bit SUBLEQ CPU architecture.  In the SLEQASM repo I have a emulator for it so the code
-can be run and debugged.
+it requres a 24-bit SUBLEQ CPU architecture.  In the SLEQASM repo I have a emulator for it so the code can be run and debugged.
+
+Multiple statemengs can be put on a single line using a colon ```:``` like
+``` 10 PRINT "Hello" : PRINT "World"```
+
+When a program is running it can be stopped by typing a CTRL-C.
+
+Variables are all 24 bit signed integers with a range from -8,388,608 to 8,388,607.
 
 ## Commands at the prompt
 

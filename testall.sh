@@ -1,6 +1,10 @@
 #!/bin/bash
 
 source ./clean.sh
+cd macrotests/testcasegen
+source build.sh
+cd ../..
+
 
 if [ $# -eq 1 ]; then
   test_name=$1

@@ -27,6 +27,14 @@ CONST_22            .data 22
 CONST_23            .data 23
 CONST_24            .data 24
 CONST_32:           .data 32
+CONST_32768:        .data 32768
+CONST_65536:        .data 65536
+CONST_xFFFF:        .data 0xFFFF
+CONST_xFF00:        .data 0xFF00
+CONST_xFF:           .data 0xFF
+
+CONST_x2D:           .data 0x2D
+
 CONST_x555:         .data 0x555
 CONST_MAXINT        .data 8388607
 

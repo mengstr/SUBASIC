@@ -1,4 +1,4 @@
-# SUBLEQ TINY BASIC
+# Tiny BASIC Interpreter in SUBLEQ Assembly
 
 ```
  __        __        ___  __     ___                __        __     __  
@@ -7,36 +7,37 @@
 [[ version 0.03 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]
 ```
 
-This is an Tiny BASIC interpreter written in SUBLEQ assembly. It's working and can run fairly complex programs but is still a work in progress.
+This project is a Tiny BASIC interpreter written in SUBLEQ assembly. It is currently functional and capable of running fairly complex programs, although it is still a work in progress.
 
-The source requires my own SUBLEQ macro assembler ```SLEQASM``` to assemble into
-code. 
+## Requirements
 
-I'm targeting this for the hardware implementation of a SUBLEQ machine I'm currently building so
-it requres a 24-bit SUBLEQ CPU architecture.  In the SLEQASM repo I have a emulator for it so the code can be run and debugged.
+To assemble the source code, you need to use my custom SUBLEQ macro assembler, SLEQASM. The target is a hardware implementation of a SUBLEQ machine with a 24-bit SUBLEQ CPU architecture. The SLEQASM repository includes an emulator for running and debugging the code.
 
-Multiple statemengs can be put on a single line using a colon ```:``` like
+## Features
+
+*Multi-statement Lines:* Multiple statements can be placed on a single line using a colon `:`.
 ``` 10 PRINT "Hello" : PRINT "World"```
 
-When a program is running it can be stopped by typing a CTRL-C.
+*Interrupt Handling:* When a program is running, it can be stopped by typing CTRL-C.
 
-Variables are all 24 bit signed integers with a range from -8,388,608 to 8,388,607.
+*Variable Support:* Variables are all 24-bit signed integers with a range from -8,388,608 to 8,388,607.
 
-## Commands at the prompt
+## Commands
 
 ### NEW
 
-The command NEW erases all of the current typed-in BASIC code
+Erases all the current typed-in BASIC code
 
 ### LIST
 
-LIST shows the current BASIC code
+Displays the current BASIC code.
 
-### RUN
+### RUN [line numer]
 
-RUN starts execution of the program at the specified line number. If no line number is given it will start at the first line. If the specified line don't exist then execution will start at the next higher number.
+Starts execution of the program at the specified line number. If no line number is given, it will start at the first line. If the specified line does not exist, execution will start at the next higher number.
 
 ## BASIC Keywords
+
 ### END
 Halts the execution of the BASIC code and returns to the BASIC command prompt
 #### Example
@@ -45,7 +46,7 @@ Halts the execution of the BASIC code and returns to the BASIC command prompt
 ```
 
 ### REM
-The rest of the line is treated as a comment. The comment can contain both double quotes and colons.
+Adds a comment. Comments are always the rest of the line
 #### Example
 ``` 
 10 REM My awesome basic program
@@ -62,8 +63,7 @@ Assigns an expression to a variable. See Expressions for more information.
 ```
 
 ### PRINT
-Prints a variable, number, expression or a string. If the PRINT statement is followed by a semicolon ```;``` then the
-automatic trailing newline (CRLF) is supressed.
+Prints a variable, number, expression, or string. If followed by a semicolon `;`, the automatic trailing newline (CRLF) is suppressed.
 #### Example
 ``` 
 10 PRINT A
@@ -73,14 +73,14 @@ automatic trailing newline (CRLF) is supressed.
 ```
 
 ### PRHEX
-PRHEX is like PRINT but it prints it as a six-digit hexadecimal number with leading zeros.
+Prints a variable as a six-digit hexadecimal number with leading zeros.
 #### Example
 ```
 10 PRHEX 513
 ```
 
 ### INPUT
-INPUT wait for the user to type a number and assigns it to the specified variable.
+Waits for the user to type a number and assigns it to the specified variable.
 #### Example
 ```
 10 INPUT A
@@ -89,7 +89,7 @@ INPUT wait for the user to type a number and assigns it to the specified variabl
 ```
 
 ### GOTO
-Continue running the program at the specified line number. If the line number dosen't exist then the line with the next higher number is used. The line number can be an expression, I.E a "Computed GOTO".
+Continues running the program at the specified line number. If the line number does not exist, the next higher number is used. The line number can be an expression (computed GOTO).
 #### Example
 ```
 10 LET A=2
@@ -102,7 +102,7 @@ Continue running the program at the specified line number. If the line number do
 ```
 
 ### GOSUB
-This is like a GOTO but with the possibility to RETURN to the instruction just after the GOSUB. More or less like a function in other languages. Just as the GOTO the line number can be "computed".
+Functions like GOTO but with the possibility to return to the instruction right after the GOSUB. The line number can be computed.
 #### Example
 ```
 10 GOSUB 100
@@ -113,17 +113,10 @@ This is like a GOTO but with the possibility to RETURN to the instruction just a
 ```
 
 ### RETURN
-This is the companion command to the GOSUB. It simply returns execution at the point directly after the GOSUB statement.
-See the GOSUB for an example.
+Returns execution to the point directly after the GOSUB statement.
 
 ### IF
-IF checks two expressions to see if the specified condition is met. If so it will execute whatever comes after the `THEN` keyword on the same line. If the condition is not met then it will continue on the next line.
-
-The condition can be one of the following:
-- &gt; (is larger than)
-- &lt; (is less than)
-- = (is equal to)
-- &lt;&gt; (is not equal to)
+Evaluates a condition and executes the statement after THEN if the condition is met. Conditions can be &gt;, <, =, or <>.
 
 #### Example
 ```
@@ -134,7 +127,7 @@ The condition can be one of the following:
 ```
 
 ### FOR
-A FOR loop takes a variable and initialises it to the specified value and then continues executing code until a `NEXT` statement is found. The variable will then be incremented by 1 and execcution will continue at the next statement after the FOR. This will happen until the variable is larger than the second specified value. Multiple FOR statements can be nested.
+Initializes a variable and runs code until a NEXT statement is found. The variable is incremented by 1 each loop iteration until it exceeds the specified value. Multiple FOR statements can be nested.
 #### Example
 ```
 10 PRINT "Multiplication table"

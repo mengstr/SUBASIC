@@ -29,11 +29,11 @@ To assemble the source code, you need to use my custom SUBLEQ macro assembler, S
 
 Erases all the current typed-in BASIC code
 
-### LIST
+### LIST [start lineNo] [end lineNo]
 
-Displays the current BASIC code.
+Displays the current BASIC code. If no lines numbers are given then show all lines. If just the starting line number is given then show just that line. If both start and stop lines are given show the lines between those.
 
-### RUN [line numer]
+### RUN [lineNo]
 
 Starts execution of the program at the specified line number. If no line number is given, it will start at the first line. If the specified line does not exist, execution will start at the next higher number.
 
@@ -143,3 +143,6 @@ Initializes a variable and runs code until a NEXT statement is found. The variab
 ### NEXT
 The NEXT statement is the companion to the FOR. See the FOR command for (pun intended) info and an example.
 
+## Change log
+
+`v0.04` LIST command can list parts of the source

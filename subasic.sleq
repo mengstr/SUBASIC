@@ -168,7 +168,7 @@ msgLogo:
         .data "/__` |  | |__) |    |__  /  \\     |  | |\\ | \\ /    |__)  /\\  /__` | /  ` "       ,"\r\n"
         .data ".__/ \\__/ |__) |___ |___ \\__\\\\    |  | | \\|  |     |__) /--\\ .__/ | \\__, "       ,"\r\n"
         .data "\r\n"
-        .data "[[ version 0.02 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]\r\n", 0
+        .data "[[ version 0.03 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]\r\n", 0
         .data "\r\n"
         .data 0                                         
 

@@ -40,7 +40,7 @@ Starts execution of the program at the specified line number. If no line number 
 ## Functions
 
 ### RND(max)
-Returns a random number between 0 and max-1. Currently the number can't be a fulle expression, only dingle number or variables are allowed.
+Returns a random number between 0 and max-1. Currently the max value can't be a full expression, only single numbers or variables are allowed.
 #### Example
 ```
 10 LET A=100+RND(10) : REM Number between 100 and 109

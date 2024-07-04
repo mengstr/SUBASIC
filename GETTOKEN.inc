@@ -63,6 +63,8 @@ tokenStr:   .data $+1
             .data 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
             .data 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 pTokenStr   .data 0
+tokenMode:  .data 0                ; 0 = Normal, 1 = accept non declared variables
+
 
 pCode:      .data 0                 ; Pointer to the current position in the program source
 ch:         .data 0                 ; Current character being processed
@@ -199,17 +201,44 @@ GetParsedToken:
 @notAKeyword:
             JMP0 tokenStr+2 @is1CharVar         ; If the token is a single character, then it is a predefined variable
 
+      ;
+      ; Check for long variable name
+      ;
+            JMPN0 tokenMode @doneVar            ; If we are accepting non-declared variables, then we are done
+            MOV vars2 @k                        ; Point to the list of long variable names
+@loopLongVar:    
+            INDEXEDRD @k @p
+            JMP0 @p VarNotFoundError            ; If we reached the end of the lomg variable table, then it is not a variable
+
+            PUSH @k                             ; Compare the token with the current keyword from the table
+            PUSH tokenStr
+            CALL CompareStringIgnoreCase
+            JMPN0 compResult @isLongVar
+
+            ADD CONST_8 @k                      ; Nope, try the next variable
+            JMP @loopLongVar
+
+@isLongVar:
+            ADD CONST_7 @k                      ; Offset to the value of the variable
+            INDEXEDRD @k tokenValue
+            MOV @k tokenAddr
+            JMP @doneVar
+
+
 @is1CharVar:
             MOV tokenStr+1 @p                   ; Get the variable name
-            SUB ASCII_A @p                          ; Variable A is the first one so we need to offset the pointer
+            SUB ASCII_A @p                      ; Variable A is the first one so we need to offset the pointer
             ADD vars1 @p                        ; Offset to the beginning of the variable table
             MOV @p tokenAddr                    ; Store the address of the variable
             INDEXEDRD tokenAddr tokenValue      ; Get the value of the variable
 
+@doneVar:
             CALL SkipSpaces                     ; Skip trailing spaces
             MOV ch tokenPeek                    ; Store the next non-space character as peek
 
+            CLR tokenMode                       ; Reset the tokenMode
             MOV CONST_2 tokenType               ; Return with type as Variable (3)
+
             RET
 
 @k          .data 0
@@ -236,6 +265,7 @@ keywords:   .data $+1
             .data kwPRHEX     + 1 
             .data kwRND       + 1
             .data kwABS       + 1
+            .data kwDIM       + 1
             0
 
 kwREM:      .data 1, "REM"   ,0
@@ -258,6 +288,7 @@ kwINPUT:    .data 17, "INPUT" ,0
 kwPRHEX:    .data 18, "PRHEX" ,0
 kwRND:      .data 19, "RND" , 0
 kwABS:      .data 20, "ABS" , 0
+kwDIM:      .data 21, "DIM" , 0
 
     .endp
 

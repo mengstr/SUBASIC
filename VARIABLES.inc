@@ -16,7 +16,16 @@ vars1:  .data $+1
 ; VARIABLES ALLOCATED BY DIM
 ;-----------------------------------------------------------------------------
 vars2:  .data $+1
-        .data "ABCDEF",0,1234567
+        .data "      ",0,0
+        .data "      ",0,0
+        .data "      ",0,0
+        .data "      ",0,0
+        .data "      ",0,0
+        .data "      ",0,0
+        .data "      ",0,0
+        .data "      ",0,0
+        .data "      ",0,0
+        .data "      ",0,0
         .data "      ",0,0
         .data "      ",0,0
         .data "      ",0,0

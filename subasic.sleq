@@ -89,16 +89,24 @@ Prompt:
         PUSH msgInvalidPrompt                   ; All other things are invalid
         JMP SyntaxError
 
+
 ;-----------------------------------------------------------------------------
-SyntaxError:
+Error:
 ;-----------------------------------------------------------------------------
 
-        PUSH msgSyntaxError
         CALL PrintString
         PUSH lineNo
         CALL PrintInteger
         PRINTCRLF
         JMP Restart
+
+SyntaxError:
+        PUSH msgSyntaxError
+        JMP Error
+
+VarNotFoundError:
+        PUSH msgVarNotFoundError
+        JMP Error
 
 ;-----------------------------------------------------------------------------
 ControlC:
@@ -154,6 +162,7 @@ notMisc:
         CMPEQ tokenValue kwNEXT cmdNEXT
         CMPEQ tokenValue kwINPUT cmdINPUT
         CMPEQ tokenValue kwPRHEX cmdPRHEX
+        CMPEQ tokenValue kwDIM cmdDIM
         JMP SyntaxError
 
 
@@ -175,7 +184,8 @@ msgLogo:
         .data 0                                         
 
 msgLineNotFound:        .data $+1, "\r\nLine not found\r\n", 0
-msgSyntaxError:         .data $+1, "\r\nSyntax error in line ", 0
+msgVarNotFoundError:    .data $+1, "\r\nVariable not found at line ", 0
+msgSyntaxError:         .data $+1, "\r\nSyntax error at line ", 0
 msgUnknownCommand:      .data $+1, "Unknown command", 0
 msgInvalidToken:        .data $+1, "Invalid token,0
 msgInvalidPrompt:       .data $+1, "Invalid command",0
@@ -216,6 +226,7 @@ msgCtrlC:               .data $+1, "\r\n\r\nHalt by ^C\r\n", 0
         .include cmdNEXT.inc
         .include cmdLIST.inc
         .include cmdNEW.inc
+        .include cmdDIM.inc
 
         ;
         ; Subroutines for the BASIC utilities
@@ -237,8 +248,8 @@ msgCtrlC:               .data $+1, "\r\n\r\nHalt by ^C\r\n", 0
 
 
 program:                                ; The program source code to be run
-L10: .data 10, L20-$-1, "FOR I=0 TO 20: LET A=RND(100)+RND(100)"    ,0      
-L20: .data 20, Lend-$-1, "PRINT A:NEXT:END"                         ,0
+L10: .data 10, L20-$-1, "DIM ABC,DEF"    ,0      
+L20: .data 20, Lend-$-1, "PRINT ABC+DEF"                         ,0
 
 ;        .include macrotests/testcasegen/multest.inc
 ;        .include macrotests/testcasegen/divtest.inc

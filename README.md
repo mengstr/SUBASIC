@@ -21,7 +21,7 @@ To assemble the source code, you need to use my custom SUBLEQ macro assembler, S
 
 *Interrupt Handling:* When a program is running, it can be stopped by typing CTRL-C.
 
-*Variable Support:* Variables are all 24-bit signed integers with a range from -8,388,608 to 8,388,607.
+*Variable Support:* Variables are all 24-bit signed integers with a range from -8,388,608 to 8,388,607. Single letter variables can be used directly, but longer names needs to be declared with a DIM statement. Variables are case insensitive.
 
 ## Commands
 
@@ -70,6 +70,17 @@ Assigns an expression to a variable. See Expressions for more information.
 20 LET C = 100
 30 LET F = C * 9 / 5 + 32
 40 PRINT F
+```
+
+### DIM
+The DIM statement creates variables with names that can be longer than a single letter. Variable names can be up to six characters long. There is a limit of 40 DIMmed variables in a program.
+#### Example
+``` 
+10 DIM Foo5
+20 DIM BAR,bletch
+30 LET foo5=11 : LET bar=88
+40 LET BLETCH=foo5+bar
+50 PRINT "Bletch=";Bletch
 ```
 
 ### PRINT
@@ -157,6 +168,6 @@ Currently the CTRL-C used to stop the running program is handled OOB of the norm
 
 ## Change log
 
-`v0.06` Implements ABS() function
+`v0.06` Implements ABS() function, DIM for long variable names
 `v0.05` Implements rudimentary RND() function
 `v0.04` LIST command can list parts of the source

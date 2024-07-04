@@ -442,3 +442,20 @@ NEW
 180 NEXT
 
 
+
+NEW
+10 LET X=1+RND(100)
+15 LET C=0
+20 PRINT "I'm thinking of a number between 1 and 100."
+30 PRINT "Try to guess it!"
+40 PRINT "Guess: "; : INPUT G
+45 LET C=C+1
+50 IF G=X THEN PRINT "Yes! That was it! You got it in only ";C;" guesses.":END
+60 IF G<X THEN PRINT "Too low.":GOTO 40
+70 PRINT "Too high.":GOTO 40
+
+
+NEW
+10 LET A=0: PRINT A;" ";ABS(A)
+20 LET B=0-5: PRINT B;" ";ABS(B)
+30 LET C=4: PRINT C;" ";ABS(C)

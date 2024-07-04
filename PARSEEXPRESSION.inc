@@ -46,6 +46,7 @@ ParseExpression:
 
 @isKeyword:
         CMPEQ tokenValue kwRND @isRND
+        CMPEQ tokenValue kwABS @isABS
         MOV @pCodeHold pCode                    ; If the expression is terminated by a keyword we need to
         RET                                     ; roll back that keyword so it can be processsed properly.
 
@@ -59,6 +60,22 @@ ParseExpression:
         PUSH tokenValue
         CALL Random
         MOV rndVal @funcValue
+
+        CALL GetParsedToken
+        CMPNE tokenValue ASCII_RIGHT_PAREN SyntaxError
+
+        MOV @funcValue tokenValue
+        JMP @isFunc
+
+@isABS:
+        CALL GetParsedToken
+        CMPNE tokenValue ASCII_LEFT_PAREN SyntaxError
+
+        CALL GetParsedToken
+        MOV tokenValue @funcValue 
+        JMPGE0 @funcValue @abs1
+        NEG @funcValue
+@abs1: 
 
         CALL GetParsedToken
         CMPNE tokenValue ASCII_RIGHT_PAREN SyntaxError

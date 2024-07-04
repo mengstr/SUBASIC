@@ -238,7 +238,6 @@ msgCtrlC:               .data $+1, "\r\n\r\nHalt by ^C\r\n", 0
 ; BASIC PROGRAM SOURCE CODE
 ;-----------------------------------------------------------------------------
 
-;        .org 0x7000
 
 program:                                ; The program source code to be run
 L10: .data 10, L20-$-1, "FOR I=0 TO 20: LET A=RND(100)+RND(100)"    ,0      

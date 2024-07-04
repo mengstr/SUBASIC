@@ -226,6 +226,7 @@ keywords:   .data $+1
             .data kwINPUT     + 1 
             .data kwPRHEX     + 1 
             .data kwRND       + 1
+            .data kwABS       + 1
             0
 
 kwREM:      .data 1, "REM"   ,0
@@ -247,6 +248,7 @@ kwRUN:      .data 16, "RUN"   ,0
 kwINPUT:    .data 17, "INPUT" ,0
 kwPRHEX:    .data 18, "PRHEX" ,0
 kwRND:      .data 19, "RND" , 0
+kwABS:      .data 20, "ABS" , 0
 
     .endp
 

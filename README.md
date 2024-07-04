@@ -152,6 +152,9 @@ Initializes a variable and runs code until a NEXT statement is found. The variab
 ### NEXT
 The NEXT statement is the companion to the FOR. See the FOR command for (pun intended) info and an example.
 
+## Oddities
+Currently the CTRL-C used to stop the running program is handled OOB of the normal flow of incoming characters. It is polled by reading from location -2. Some day it will probably be handled in the normal (-1) input reading of characters, but that would require a key-buffer to be held internally in the interpreter.
+
 ## Change log
 
 `v0.04` LIST command can list parts of the source

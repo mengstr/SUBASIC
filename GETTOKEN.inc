@@ -86,9 +86,9 @@ GetParsedToken:
             MOV tokenStr pTokenStr
             CLR tokenStr+1
 
-            CALL SkipSpaces               ; Skip any leading spaces
+            CALL SkipSpaces                           ; Skip any leading spaces
 
-            CMPEQ ch CONST_0 @atEOL       ; Reached End-of-Line
+            CMPEQ ch CONST_0 @atEOL                   ; Reached End-of-Line
             CMPEQ ch ASCII_DOUBLEQUOTE @string        ; Collect a String
             JBETWEEN ch ASCII_0 ASCII_9 @number       ; Collect a Number
             JBETWEEN ch ASCII_A ASCII_Z @kwVar        ; Collect a Keyword or Variable
@@ -96,72 +96,75 @@ GetParsedToken:
 
             MOV ch tokenValue                         ; Store in both tokenValue
 
-            INDEXEDWR ch pTokenStr                     ; and in tokenString
+            INDEXEDWR ch pTokenStr                    ; and in tokenString
             INC pTokenStr
-            INDEXEDWR CONST_0 pTokenStr          ; Terminate the collected tokenString
+            INDEXEDWR CONST_0 pTokenStr               ; Terminate the collected tokenString
 
-            INC pCode                           ; Gobble up the character
-            CALL SkipSpaces                     ; Skip trailing spaces
-            MOV ch tokenPeek                    ; Store the next non-space character as peek
+            INC pCode                                 ; Gobble up the character
+            CALL SkipSpaces                           ; Skip trailing spaces
+            MOV ch tokenPeek                          ; Store the next non-space character as peek
 
-            MOV CONST_5 tokenType               ; Return with type as miscellaneous (5)
+            MOV CONST_5 tokenType                     ; Return with type as miscellaneous (5)
             RET
 
 @atEOL:     INC pCode
-            MOV CONST_0 tokenType               ; Return with type as EOL (0)
+            MOV CONST_0 tokenType                     ; Return with type as EOL (0)
             RET
 
-@string:    INC pCode                           ; Skip the initial quote
+@string:    INC pCode                                 ; Skip the initial quote
             INDEXEDRD pCode ch
             CMPEQ ch ASCII_DOUBLEQUOTE @stringDone
             CMPEQ ch CONST_0 SyntaxError
             INDEXEDWR ch pTokenStr
             INC pTokenStr
             JMP @string
-@stringDone:INC pCode                           ; Skip the trailing quote
-            INDEXEDWR CONST_0 pTokenStr          ; Terminate the collected tokenString
+@stringDone:INC pCode                                 ; Skip the trailing quote
+            INDEXEDWR CONST_0 pTokenStr               ; Terminate the collected tokenString
 
-            CALL SkipSpaces                     ; Skip trailing spaces
-            MOV ch tokenPeek                    ; Store the next non-space character as peek
+            CALL SkipSpaces                           ; Skip trailing spaces
+            MOV ch tokenPeek                          ; Store the next non-space character as peek
 
-            MOV CONST_4 tokenType               ; Return with type as string (4)
+            MOV CONST_4 tokenType                     ; Return with type as string (4)
             RET
 
-@number:    INDEXEDWR ch pTokenStr               ; Append digit to string
+@number:    INDEXEDWR ch pTokenStr                    ; Append digit to string
             INC pTokenStr
 
-            MUL CONST_10 tokenValue           ; Compute the current number collected do far
+            MUL CONST_10 tokenValue                   ; Compute the current number collected so far
             ADD ch tokenValue
             SUB ASCII_0 tokenValue
 
-            INC pCode                           ; Get next digit and continue collecting if
-            INDEXEDRD pCode ch                  ; it's a digit
+            INC pCode                                 ; Get next digit and continue collecting if
+            INDEXEDRD pCode ch                        ; it's a digit
             JBETWEEN ch ASCII_0 ASCII_9 @number
 
-            INDEXEDWR CONST_0 pTokenStr         ; Terminate string
+            INDEXEDWR CONST_0 pTokenStr               ; Terminate string
 
-            CALL SkipSpaces                     ; Skip trailing spaces
-            MOV ch tokenPeek                    ; Store the next non-space character as peek
+            CALL SkipSpaces                           ; Skip trailing spaces
+            MOV ch tokenPeek                          ; Store the next non-space character as peek
 
-            MOV CONST_1 tokenType               ; Return with type as numeric (1)
+            MOV CONST_1 tokenType                     ; Return with type as numeric (1)
             RET
 
 
-@kwVar:     INDEXEDWR ch pTokenStr               ; Append character to string
+@kwVar:     JBETWEEN ch ASCII_a ASCII_z @lc
+            JMP @uc
+@lc:        SUB CONST_32 ch
+@uc:        INDEXEDWR ch pTokenStr                    ; Append character to string
             INC pTokenStr
 
-            INC pCode                           ; Get the next character
+            INC pCode                                 ; Get the next character
             INDEXEDRD pCode ch
 
-            JBETWEEN ch ASCII_A ASCII_Z @kwVar  ; Keep collecting as long we have A-Z, a-z 0-9 or underscore 
+            JBETWEEN ch ASCII_A ASCII_Z @kwVar        ; Keep collecting as long we have A-Z, a-z 0-9 or underscore 
             JBETWEEN ch ASCII_a ASCII_z @kwVar  
             JBETWEEN ch ASCII_0 ASCII_9 @kwVar      
             CMPEQ ch ASCII_UNDERSCORE @kwVar      
 
-            INDEXEDWR CONST_0 pTokenStr          ; Terminate the collected tokenString
+            INDEXEDWR CONST_0 pTokenStr               ; Terminate the collected tokenString
 
-            CALL SkipSpaces                     ; Skip trailing spaces
-            MOV ch tokenPeek                    ; Store the next non-space character as peek
+            CALL SkipSpaces                           ; Skip trailing spaces
+            MOV ch tokenPeek                          ; Store the next non-space character as peek
 
             ;
             ; Check if it is a keyword
@@ -190,12 +193,18 @@ GetParsedToken:
             MOV CONST_3 tokenType               ; Return with type as keyword (3)
             RET
 
+      ;
+      ; It is a variable
+      ;
 @notAKeyword:
-            MOV vars @p
-            ASCII_A @p
-            ADD tokenStr+1 @p
-            MOV @p tokenAddr
-            INDEXEDRD tokenAddr tokenValue
+            JMP0 tokenStr+2 @is1CharVar         ; If the token is a single character, then it is a predefined variable
+
+@is1CharVar:
+            MOV tokenStr+1 @p                   ; Get the variable name
+            SUB ASCII_A @p                          ; Variable A is the first one so we need to offset the pointer
+            ADD vars1 @p                        ; Offset to the beginning of the variable table
+            MOV @p tokenAddr                    ; Store the address of the variable
+            INDEXEDRD tokenAddr tokenValue      ; Get the value of the variable
 
             CALL SkipSpaces                     ; Skip trailing spaces
             MOV ch tokenPeek                    ; Store the next non-space character as peek

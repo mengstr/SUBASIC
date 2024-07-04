@@ -16,7 +16,7 @@ ParseExpression:
 
 @loop:
         JBETWEEN tokenPeek ASCII_A ASCII_Z @peekOk
-        JBETWEEN tokenPeek ASCII_z ASCII_z @peekOk
+        JBETWEEN tokenPeek ASCII_a ASCII_z @peekOk
         JBETWEEN tokenPeek ASCII_0 ASCII_9 @peekOk
         CMPEQ tokenPeek ASCII_DOUBLEQUOTE @peekOk
         CMPEQ tokenPeek ASCII_PLUS @peekOk              ; Operand + addition

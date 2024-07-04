@@ -170,13 +170,10 @@ msgLogo:
         .data "/__` |  | |__) |    |__  /  \\     |  | |\\ | \\ /    |__)  /\\  /__` | /  ` "       ,"\r\n"
         .data ".__/ \\__/ |__) |___ |___ \\__\\\\    |  | | \\|  |     |__) /--\\ .__/ | \\__, "       ,"\r\n"
         .data "\r\n"
-        .data "[[ version 0.05 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]\r\n", 0
+        .data "[[ version 0.06 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]\r\n", 0
         .data "\r\n"
         .data 0                                         
 
-msgHaltedByEnd:         .data $+1, "\r\n", 0
-;msgHaltedByEnd:        .data $+1, "\r\nExecution halted by END\r\n", 0
-msgEndOfFile:           .data $+1, "\r\nExecution halted by End Of File\r\n", 0
 msgLineNotFound:        .data $+1, "\r\nLine not found\r\n", 0
 msgSyntaxError:         .data $+1, "\r\nSyntax error in line ", 0
 msgUnknownCommand:      .data $+1, "Unknown command", 0

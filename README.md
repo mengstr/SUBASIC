@@ -157,5 +157,6 @@ Currently the CTRL-C used to stop the running program is handled OOB of the norm
 
 ## Change log
 
-`v0.04` LIST command can list parts of the source
+`v0.06` Implements ABS() function
 `v0.05` Implements rudimentary RND() function
+`v0.04` LIST command can list parts of the source

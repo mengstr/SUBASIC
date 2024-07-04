@@ -4,7 +4,7 @@
  __        __        ___  __     ___                __        __     __  
 /__` |  | |__) |    |__  /  \     |  | |\ | \ /    |__)  /\  /__` | /  ` 
 .__/ \__/ |__) |___ |___ \__\\    |  | | \|  |     |__) /--\ .__/ | \__, 
-[[ version 0.05 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]
+[[ version 0.06 - (c) 2024 Mats Engstrom - github.com/mengstr/SUBASIC ]]
 ```
 
 This project is a Tiny BASIC interpreter written in SUBLEQ assembly. It is currently functional and capable of running fairly complex programs, although it is still a work in progress.
@@ -167,7 +167,8 @@ The NEXT statement is the companion to the FOR. See the FOR command for (pun int
 Currently the CTRL-C used to stop the running program is handled OOB of the normal flow of incoming characters. It is polled by reading from location -2. Some day it will probably be handled in the normal (-1) input reading of characters, but that would require a key-buffer to be held internally in the interpreter.
 
 ## Change log
-
 `v0.06` Implements ABS() function, DIM for long variable names
+
 `v0.05` Implements rudimentary RND() function
+
 `v0.04` LIST command can list parts of the source

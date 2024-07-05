@@ -1,18 +1,20 @@
 #!/bin/bash
 
-source ./clean.sh
-cd macrotests/testcasegen
-source build.sh
-cd ../..
+# source ./clean.sh
+# cd macrotests/testcasegen
+# source build.sh
+# cd ../..
 
 
 if [ $# -eq 1 ]; then
   test_name=$1
+  debug=0
 else
+  echo -e "\033c"
   test_name=""
+  debug=0
 fi
 
-echo -e "\033c"
 
 ls macrotests | grep .sleq | sed 's/.sleq//' | while read line; do 
     if [ ! -z "$test_name" ] && [[ "$line" != $test_name* ]]; then
@@ -29,8 +31,8 @@ ls macrotests | grep .sleq | sed 's/.sleq//' | while read line; do
     fi
 
     result=$(  \
-        ../SLEQASM/sleqasm.js macrotests/$line.sleq 0 && \
-        ../SLEQASM/subleq.js macrotests/$line.v20raw -q | \
+        ../SLEQASM/sleqasm.js macrotests/$line.sleq $debug && \
+        ../SLEQASM/subleq macrotests/$line.v20raw -q | \
         tr -d '\n' | \
         tr -d '\r' \
     )

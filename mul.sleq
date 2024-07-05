@@ -2,10 +2,6 @@
 
     .org 0
 
-Z:          .data 0 
-PLUS1:      .data 1 
-MINUS1:     .data (-1)
-
     JMP Start  
  
 ; Addresses
@@ -104,6 +100,11 @@ END:
 
 ; End of program
     HALT
+
+T:          .data 0
+tokenType:  .data 0     
+tokenValue: .data 0
+tokenAddr:  .data 0
 
     .include CONSTANTS.inc
     .include IO.INC

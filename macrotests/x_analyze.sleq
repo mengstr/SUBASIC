@@ -1,8 +1,5 @@
         .include MACROS.inc
         .org 0
-Z:      .data 0 
-PLUS1:  .data 1 
-MINUS1: .data (-1)
 
         MOV stack_ SP                              ; Initialize the stack pointer
         MOV TESTNUMS_ p1

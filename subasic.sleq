@@ -2,10 +2,10 @@
 
             .org 0
 
-Z:          .data 0 
-PLUS1:      .data 1 
-MINUS1:     .data (-1)
             JMP Start
+
+
+T:          .data 0             ; Temporary variable used in lieu of Z
 
 tmpA:       .data 0             ; Used by macros
 tmpB:       .data 0             ; Used by macros
@@ -38,25 +38,14 @@ x: .data 0
 Start:
         MOV stack_ SP                              ; Initialize the stack pointer
 
+        CALL FindVar
+        PUSH tokenValue
+        CALL PrintInteger
+;        HALT
+
         PUSH msgLogo
         CALL PrintString
         DEBUGPRINT "[Debug mode enabled]\r\n"
-
-
-
-;        MOV CONST_1000000 x
-;Lupe:
-;
-;        PUSH CONST_100
-;        CALL Random
-;        PUSH rndVal
-;        CALL PrintInteger
-;        PRINTCRLF
-;
-;        DEC x
-;        JMPN0 x Lupe
-;
-;        HALT
 
 
 ;-----------------------------------------------------------------------------
@@ -207,7 +196,6 @@ msgCtrlC:               .data $+1, "\r\n\r\nHalt by ^C\r\n", 0
         .include ATOI.inc
         .include RANDOM.inc
         .include CONSTANTS.inc
-        .include STACK.inc
 
         ;
         ; Subroutines for the BASIC commands
@@ -255,3 +243,12 @@ L20: .data 20, Lend-$-1, "PRINT ABC+DEF"                         ,0
 ;        .include macrotests/testcasegen/divtest.inc
 
 Lend:.data 0
+
+        .org $+16384               ; Reserve 4K for the BASIC Source code
+
+
+;-----------------------------------------------------------------------------
+        ; The stack should end up at the absolute top
+;-----------------------------------------------------------------------------
+        .include STACK.inc
+

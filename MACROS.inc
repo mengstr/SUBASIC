@@ -17,9 +17,9 @@
     .macro INDEXEDRD srcP dest   ; Copy [srcP] to dest
         MOV srcP @p
         CLR dest        ; The next four instructions are a MOV macro expanded here inline
-@p:     0 Z
-        Z dest
-        CLR Z
+        CLR T
+@p:     0 T
+        T dest
     .endm
 
 ;--------------------------------------------------------------------------------------------
@@ -28,11 +28,10 @@
         MOV destP (@p1+0) 
         MOV destP (@p1+1)
         MOV destP (@p2+1)
-
+        CLR T
 @p1:    0 0                     ; The next instructions are a MOV macro expanded here inline
-        src Z
-@p2     Z 0
-        CLR Z
+        src T
+@p2     T 0
     .endm
 
 ;--------------------------------------------------------------------------------------------

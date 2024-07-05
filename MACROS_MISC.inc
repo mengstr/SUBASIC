@@ -65,9 +65,9 @@
 ;--------------------------------------------------------------------------------------------
 
     .macro ADD a b         ; Add a to b and store in b
-        a Z                ; Z = -a
-        Z b                ; b = b - Z = b - -a = b + a
-        CLR Z
+        CLR T
+        a T                ; Z = -a
+        T b                ; b = b - Z = b - -a = b + a
     .endm
 
 ;--------------------------------------------------------------------------------------------
@@ -85,7 +85,7 @@
 
     .macro MOV src dest      ; Copy value at src to dest
         CLR dest
-        src Z
-        Z dest
-        CLR Z
+        CLR T
+        src T
+        T dest
     .endm

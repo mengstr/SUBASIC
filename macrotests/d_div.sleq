@@ -1,6 +1,6 @@
 ;# SCRIPT
-; Anums=(200 15467 17404 82553 93163 18039 2829089)
-; Bnums=(1 2 3 10 13 100 214 396 515 644 1000 6821 22639 88888)
+; Anums=(-222 -12467 -7404 -87553 -73163 -17039 -2729089 200 15467 17404 82553 93163 18039 2829089)
+; Bnums=(-1 -2 -3 -10 -13 -100 -214 -396 -515 -644 -1000 -6821 -22639 -88888 1 2 3 10 13 100 214 396 515 644 1000 6821 22639 88888)
 ; for B in "${Bnums[@]}"; do
 ;   for A in "${Anums[@]}"; do
 ;       C=$(( A / B ))
@@ -11,88 +11,66 @@
 
         .include MACROS.inc
         .org 0
-Z:      .data 0 
-PLUS1:  .data 1 
-MINUS1: .data (-1)
 
 ; DIV a b
 
         MOV stack_ SP                              ; Initialize the stack pointer
 
+        MOV TESTNUMS2_ po
+loop2:  INDEXEDRD po vo
+        CMPEQ CONST_END vo done2
 
-        MOV TESTNUMS2_ p2
-loop2:  INDEXEDRD p2 v2
-        CMPEQ CONST_END v2 done2
+        MOV TESTNUMS1_ pi
+loop1:  INDEXEDRD pi vi
+        CMPEQ CONST_END vi done1
 
-        MOV TESTNUMS1_ p1
-loop1:  INDEXEDRD p1 v1
-        CMPEQ CONST_END v1 done1
+        DIV vo vi
 
-        DIV v2 v1
-        PUSH v1
+        PUSH vi
         CALL PrintInteger
         OUT ASCII_SPACE
-
-cont:   INC p1
+ 
+cont:   INC pi
         JMP loop1
 
-done1:  INC p2
+done1:  INC po
         JMP loop2
 
 done2:  PRINTCRLF
         HALT
 
-CONST_END:  .data 0x650318
+Restart:
+        HALT
+
+
+msgDivZeroError: .data $+1, "Error: Division by zero\n",0
+
+CONST_END:   .data 0x650318
 
 TESTNUMS1_:  .data TESTNUMS1
-TESTNUMS1:   .data 200,15467,17404,82553,93163,18039,2829089
+TESTNUMS1:   .data -222,-12467,-7404,-87553,-73163,-17039,-2729089,200,15467,17404,82553,93163,18039,2829089
+
              .data 0x650318
 
 TESTNUMS2_:  .data TESTNUMS2
-TESTNUMS2:   .data 1,2,3,10,13,100,214,396,515,644,1000,6821,22639,88888
+TESTNUMS2:   .data -1,-2,-3,-10,-13,-100,-214,-396,-515,-644,-1000,-6821,-22639,-88888,1,2,3,10,13,100,214,396,515,644,1000,6821,22639,88888
              .data 0x650318
 
 divRemainder:  .data 0          ; Remainder from DIV operation to be used for modulus operations
-p1:          .data 0
-v1:          .data 0
-p2:          .data 0
-v2:          .data 0
 
-P1:         .data 1
-P2:         .data 2
-P3:         .data 3
-P4:         .data 4
-P5:         .data 5
-P6:         .data 6
-P10:        .data 10
-P17:        .data 17
-P20:        .data 20
-P100:       .data 100
-P1000:      .data 1000
-P10000:     .data 10000
-P100000:    .data 100000
-P1000000:   .data 1000000
-ZERO:       .data 0
-M1:         .data -1
-M2:         .data -2
-M3:         .data -3
-M4:         .data -4
-M5:         .data -5
-M6:         .data -6
-M10:        .data -10
-M100:       .data -100
-M1000:      .data -1000
-M10000:     .data -10000
-M100000:    .data -100000
-M1000000:   .data -1000000
-
-A:          .data 0              ; test variable
-B:          .data 0              ; test variable
-T:          .data 0
+pi:          .data 0
+vi:          .data 0
+po:          .data 0
+vo:          .data 0
 
 tmpA:       .data 0             ;Used by macros
 tmpB:       .data 0             ;Used by macros
 tmpC:       .data 0             ;Used by macros
+
+T:          .data 0
+tokenType:  .data 0     
+tokenValue: .data 0
+tokenAddr:  .data 0
 
         .include IO.inc
         .include CONSTANTS.inc

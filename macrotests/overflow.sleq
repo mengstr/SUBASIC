@@ -1,18 +1,13 @@
-                .include MACROS.inc
 
 ;# SCRIPT
 ; echo "8388605 7FFFFD;8388606 7FFFFE;8388607 7FFFFF;-8388608 800000;-8388607 800001;-8388606 800002"
 ;# END
 
-            .org 0
+        .include MACROS.inc
+        .org 0
 
-Z:          .data 0 
-PLUS1:      .data 1 
-MINUS1:     .data (-1)
-
-;
 ; TEST OVERFLOW
-;
+
         MOV stack_ SP                              ; Initialize the stack pointer
 
         PUSH OVERFLOW
@@ -71,12 +66,14 @@ MINUS1:     .data (-1)
 
 OVERFLOW:    .data 8388605
 
-A:          .data 0              ; test variable
-B:          .data 0              ; test variable
-T:          .data 0
 tmpA:       .data 0             ;Used by macros
 tmpB:       .data 0             ;Used by macros
 tmpC:       .data 0             ;Used by macros
+
+T:          .data 0
+tokenType:  .data 0     
+tokenValue: .data 0
+tokenAddr:  .data 0
 
         .include IO.inc
         .include CONSTANTS.inc

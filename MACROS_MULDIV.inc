@@ -30,22 +30,24 @@
 ; 
 
     .macro MUL a b                 ; Multiply a by b and store in b;
+        MOV a @aa
+        MOV b @bb
+
         CLR @result
 
         CLR @sign                   ; Calculate sign and absolute the a/b values
-        JMPGE0 a @aIsPos
-        NEG a
+        JMPGE0 @aa @aIsPos
+        NEG @aa
         TOGGLE01 @sign
-@aIsPos:JMPGE0 b @bIsPos
-        NEG b
+@aIsPos:JMPGE0 @bb @bIsPos
+        NEG @bb
         TOGGLE01 @sign
 @bIsPos:
 
-        MOV a @aa
         MOV CONST_23 @cnt
 @loop:
         JMPGE0 @aa @skip
-        ADD b @result
+        ADD @bb @result
 @skip:
         ADD @aa @aa
         ADD @result @result
@@ -53,16 +55,15 @@
         JMPG0 @cnt @loop
 
         JMPGE0 @aa @skip1
-        ADD b @result
+        ADD @bb @result
 @skip1:
-
         JMP @done
 
 @result:    .data 0
 @sign:      .data 0
 @aa:        .data 0
+@bb:        .data 0
 @cnt:       .data 0
-
 
 @done:
         MOV @result b

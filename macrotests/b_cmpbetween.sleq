@@ -55,22 +55,7 @@ TESTNUMS_:  .data TESTNUMS
 TESTNUMS:   .data -8388608,-8388607,-8388606,-8388605,-4,-3,-2,-1,0,1,2,3,4,8388604,8388605,8388606,8388607
             .data 0x650318
 
-p1:          .data 0
-v1:          .data 0
-p2:          .data 0
-v2:          .data 0
-p3:          .data 0
-v3:          .data 0
-
-tmpA:       .data 0             ;Used by macros
-tmpB:       .data 0             ;Used by macros
-tmpC:       .data 0             ;Used by macros
-
-T:          .data 0
-tokenType:  .data 0     
-tokenValue: .data 0
-tokenAddr:  .data 0
-
+        .include macrotests/vars.inc
 
         .include IO.inc
         .include CONSTANTS.inc

@@ -6,6 +6,8 @@
 
 
 T:          .data 0             ; Temporary variable used in lieu of Z
+tMov:       .data 0             ; Temporary variable used in lieu of Z for MOV macro
+tIdx:       .data 0             ; Temporary variable used in lieu of Z for INDEXEDRD/WR macro
 
 tmpA:       .data 0             ; Used by macros
 tmpB:       .data 0             ; Used by macros
@@ -34,19 +36,13 @@ divRemainder:  .data 0          ; Remainder from DIV operation to be used for mo
 ;-----------------------------------------------------------------------------
 ; START OF CODE
 ;-----------------------------------------------------------------------------
-x: .data 0
+x: .data 0x650318
 Start:
         MOV stack_ SP                              ; Initialize the stack pointer
-
-        CALL FindVar
-        PUSH tokenValue
-        CALL PrintInteger
-;        HALT
 
         PUSH msgLogo
         CALL PrintString
         DEBUGPRINT "[Debug mode enabled]\r\n"
-
 
 ;-----------------------------------------------------------------------------
 ; COMMAND LINE PROMPT WITH RESETTING THE STACK AFTER ERROR
@@ -68,9 +64,9 @@ Prompt:
         CALL InputString        
         MOV buf pCode
         CALL GetParsedToken
-        CMPEQ tokenType CONST_0 Prompt          ; Empty line, prompt again
+        CMPEQ tokenType TT_EOL Prompt           ; Empty line, prompt again
 
-        CMPEQ tokenType CONST_1 Editor          ; Starts with a number, so it's an editor command
+        CMPEQ tokenType TT_NUMBER Editor        ; Starts with a number, so it's an editor command
         PRINTCRLF
         CMPEQ tokenValue kwLIST PromptLIST      ; LIST command
         CMPEQ tokenValue kwRUN PromptRUN        ; RUN command
@@ -132,8 +128,8 @@ Statement:
 
         CALL GetParsedToken
 
-        CMPEQ tokenType CONST_0 ProgramLine     ; End-Of-Line?
-        CMPNE tokenType CONST_5 notMisc
+        CMPEQ tokenType TT_EOL ProgramLine     ; End-Of-Line?
+        CMPNE tokenType TT_MISC notMisc
         CMPEQ tokenValue ASCII_COLON Statement  ; End-Of-Statement?
         JMP SyntaxError        
 

@@ -6,7 +6,7 @@ cmdREM:
 ;
 ;-------|-----------------------------------|-------------------------------------
 
-        DEBUGPRINT "cmdREM:\r\n"
+        DEBUGPRINT "[cmdREM]\r\n"
 
 
         MOV addrNextLine pCode           ; addrNextLine is calculated when the line is initially

@@ -52,6 +52,15 @@
 ;
 ;-----------------------------------------------------------------------------
 
+
+TT_EOL:           .equ CONST_0
+TT_NUMBER:        .equ CONST_1
+TT_VARIABLE:      .equ CONST_2
+TT_KEYWORD:       .equ CONST_3
+TT_STRING:        .equ CONST_4
+TT_MISC:          .equ CONST_5
+TT_NOTFOUND:      .equ CONST_6
+
 tokenType:  .data 0     
 tokenValue: .data 0
 tokenAddr:  .data 0
@@ -81,6 +90,8 @@ SkipSpaces:
 
       .proc GetToken
 GetParsedToken: 
+            DEBUGPRINT "[GETPARSEDTOKEN]\r\n"
+
             CLR tokenType
             CLR tokenValue
             CLR tokenAddr
@@ -106,11 +117,11 @@ GetParsedToken:
             CALL SkipSpaces                           ; Skip trailing spaces
             MOV ch tokenPeek                          ; Store the next non-space character as peek
 
-            MOV CONST_5 tokenType                     ; Return with type as miscellaneous (5)
+            MOV TT_MISC tokenType                     ; Return with type as miscellaneous (5)
             RET
 
 @atEOL:     INC pCode
-            MOV CONST_0 tokenType                     ; Return with type as EOL (0)
+            MOV TT_EOL tokenType                     ; Return with type as EOL (0)
             RET
 
 @string:    INC pCode                                 ; Skip the initial quote
@@ -126,7 +137,7 @@ GetParsedToken:
             CALL SkipSpaces                           ; Skip trailing spaces
             MOV ch tokenPeek                          ; Store the next non-space character as peek
 
-            MOV CONST_4 tokenType                     ; Return with type as string (4)
+            MOV TT_STRING tokenType                     ; Return with type as string (4)
             RET
 
 @number:    INDEXEDWR ch pTokenStr                    ; Append digit to string
@@ -145,7 +156,7 @@ GetParsedToken:
             CALL SkipSpaces                           ; Skip trailing spaces
             MOV ch tokenPeek                          ; Store the next non-space character as peek
 
-            MOV CONST_1 tokenType                     ; Return with type as numeric (1)
+            MOV TT_NUMBER tokenType                     ; Return with type as numeric (1)
             RET
 
 
@@ -172,58 +183,27 @@ GetParsedToken:
             ; Check if it is a keyword
             ;
 
-            MOV keywords @k                     ; If we are here, then it is a keyword or a variable
-@loopKw:    
-            INDEXEDRD @k @p
-            JMP0 @p @notAKeyword                ; If we reached the end of the keyword table, then it is not a keyword
-
-            PUSH @p                             ; Compare the token with the current keyword from the table
             PUSH tokenStr
-            CALL CompareStringIgnoreCase
-            JMPN0 compResult @isKeyword
-
-            INC @k                              ; Nope, try the next keyword
-            INC tokenValue
-            JMP @loopKw
-
-@isKeyword:
-            INC tokenValue                      ; Adjust the tokenValue
+            CALL FindKeyword
+            CMPEQ tokenType TT_NOTFOUND @notAKeyword
 
             CALL SkipSpaces                     ; Skip trailing spaces
             MOV ch tokenPeek                    ; Store the next non-space character as peek
-
-            MOV CONST_3 tokenType               ; Return with type as keyword (3)
             RET
 
-      ;
-      ; It is a variable
-      ;
+            ;
+            ; It is a variable
+            ;
 @notAKeyword:
             JMP0 tokenStr+2 @is1CharVar         ; If the token is a single character, then it is a predefined variable
 
-      ;
-      ; Check for long variable name
-      ;
-            JMPN0 tokenMode @doneVar            ; If we are accepting non-declared variables, then we are done
-            MOV vars2 @k                        ; Point to the list of long variable names
-@loopLongVar:    
-            INDEXEDRD @k @p
-            JMP0 @p VarNotFoundError            ; If we reached the end of the lomg variable table, then it is not a variable
-
-            PUSH @k                             ; Compare the token with the current keyword from the table
+            ;
+            ; Check for long variable name
+            ;
             PUSH tokenStr
-            CALL CompareStringIgnoreCase
-            JMPN0 compResult @isLongVar
-
-            ADD CONST_8 @k                      ; Nope, try the next variable
-            JMP @loopLongVar
-
-@isLongVar:
-            ADD CONST_7 @k                      ; Offset to the value of the variable
-            INDEXEDRD @k tokenValue
-            MOV @k tokenAddr
+            CALL FindVariable
+            CMPEQ tokenType TT_NOTFOUND @notVariable
             JMP @doneVar
-
 
 @is1CharVar:
             MOV tokenStr+1 @p                   ; Get the variable name
@@ -235,60 +215,24 @@ GetParsedToken:
 @doneVar:
             CALL SkipSpaces                     ; Skip trailing spaces
             MOV ch tokenPeek                    ; Store the next non-space character as peek
-
             CLR tokenMode                       ; Reset the tokenMode
-            MOV CONST_2 tokenType               ; Return with type as Variable (3)
-
+            MOV TT_VARIABLE tokenType           ; Return with type as Variable (2)
             RET
+
+
+@notVariable:
+            JMP0 tokenMode SyntaxError          ; If we are not accepting non declared variables, then it is an error
+            CALL SkipSpaces                     ; Skip trailing spaces
+            MOV ch tokenPeek                    ; Store the next non-space character as peek
+            CLR tokenMode                       ; Reset the tokenMode
+            MOV TT_STRING tokenType             ; Return with type as String (used by DIM statement)
+            RET
+            
+            
 
 @k          .data 0
 @p          .data 0
 
-keywords:   .data $+1
-            .data kwREM       + 1
-            .data kwLET       + 1
-            .data kwIF        + 1
-            .data kwTHEN      + 1
-            .data kwGOTO      + 1 
-            .data kwPRINT     + 1 
-            .data kwGOSUB     + 1
-            .data kwRETURN    + 1
-            .data kwFOR       + 1
-            .data kwTO        + 1
-            .data kwSTEP      + 1
-            .data kwNEXT      + 1
-            .data kwEND       + 1
-            .data kwLIST      + 1
-            .data kwNEW       + 1 
-            .data kwRUN       + 1 
-            .data kwINPUT     + 1 
-            .data kwPRHEX     + 1 
-            .data kwRND       + 1
-            .data kwABS       + 1
-            .data kwDIM       + 1
-            0
-
-kwREM:      .data 1, "REM"   ,0
-kwLET:      .data 2, "LET"   ,0
-kwIF:       .data 3, "IF"    ,0
-kwTHEN:     .data 4, "THEN"  ,0
-kwGOTO:     .data 5, "GOTO"  ,0
-kwPRINT:    .data 6, "PRINT" ,0
-kwGOSUB:    .data 7, "GOSUB" ,0
-kwRETURN:   .data 8, "RETURN",0
-kwFOR:      .data 9, "FOR"   ,0
-kwTO:       .data 10, "TO"   ,0
-kwSTEP:     .data 11, "STEP" ,0
-kwNEXT:     .data 12, "NEXT" ,0
-kwEND:      .data 13, "END"   ,0
-kwLIST:     .data 14, "LIST"  ,0
-kwNEW:      .data 15, "NEW"   ,0
-kwRUN:      .data 16, "RUN"   ,0
-kwINPUT:    .data 17, "INPUT" ,0
-kwPRHEX:    .data 18, "PRHEX" ,0
-kwRND:      .data 19, "RND" , 0
-kwABS:      .data 20, "ABS" , 0
-kwDIM:      .data 21, "DIM" , 0
 
     .endp
 

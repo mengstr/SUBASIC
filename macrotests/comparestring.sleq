@@ -50,15 +50,7 @@ S3:         .data $+1, "ENGSTROM",0
 S4:         .data $+1, "Z",0
 S5:         .data $+1, "",0  
 
-tmpA:       .data 0             ;Used by macros
-tmpB:       .data 0             ;Used by macros
-tmpC:       .data 0             ;Used by macros
-
-T:          .data 0
-tokenType:  .data 0     
-tokenValue: .data 0
-tokenAddr:  .data 0
-
+        .include macrotests/vars.inc
 
         .include IO.inc
         .include STRING.inc

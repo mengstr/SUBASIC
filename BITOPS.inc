@@ -22,7 +22,7 @@ AND:
         @numA @t @Atestmore
         @t @t @A1bit
 @Atestmore: 
-        PLUS1 @t @A0bit         
+        CONST_1 @t @A0bit         
 @A1bit:
         JMP @TestB                         ; TODO: Check @numB
 @A0bit:
@@ -33,7 +33,7 @@ AND:
         @numB @t @Btestmore
         @t @t @B1bit
 @Btestmore: 
-        PLUS1 @t @B0bit         
+        CONST_1 @t @B0bit         
 @B1bit:
         JMP @isTrue                         ; Both A and B bits are 1, so the result is 1
 @B0bit:
@@ -83,7 +83,7 @@ OR:
         @numA @t @Atestmore
         @t @t @A1bit
 @Atestmore: 
-        PLUS1 @t @A0bit         
+        CONST_1 @t @A0bit         
 @A1bit:
         JMP @isTrue                         ; For OR - is a bit is 1, then the result must be 1
 @A0bit:
@@ -94,7 +94,7 @@ OR:
         @numB @t @Btestmore
         @t @t @B1bit
 @Btestmore: 
-        PLUS1 @t @B0bit         
+        CONST_1 @t @B0bit         
 @B1bit:
         JMP @isTrue                         ; B is 1, so the result is 1
 @B0bit:
@@ -146,7 +146,7 @@ XOR:
         @numA @t @Atestmore
         @t @t @A1bit
 @Atestmore: 
-        PLUS1 @t @A0bit         
+        CONST_1 @t @A0bit         
 @A1bit:
         INC @v
 @A0bit:
@@ -156,7 +156,7 @@ XOR:
         @numB @t @Btestmore
         @t @t @B1bit
 @Btestmore: 
-        PLUS1 @t @B0bit         
+        CONST_1 @t @B0bit         
 @B1bit:
         INC @v
 @B0bit:

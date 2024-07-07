@@ -9,7 +9,7 @@ cmdLET:        .proc cmdLET
 ;
 ;-------|-----------------------------------|-------------------------------------
 
-        DEBUGPRINT "cmdLET:\r\n"
+        DEBUGPRINT "[cmdLET]\r\n"
 
         CALL GetParsedToken                 ; Get the variable name
         MOV tokenAddr @dest

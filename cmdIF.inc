@@ -12,7 +12,7 @@ cmdIF:        .proc cmdIF
        MOV expression @var1
 
        CALL GetParsedToken                              ; comparison token
-       CMPNE tokenType CONST_5 SyntaxError
+       CMPNE tokenType TT_MISC SyntaxError
        MOV tokenValue @cmp
        CMPNE tokenValue ASCII_LESS @notCompound
        CMPNE tokenPeek ASCII_GREATER @notCompound

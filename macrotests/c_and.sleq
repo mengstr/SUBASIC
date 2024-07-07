@@ -195,17 +195,7 @@ CONST_10696868:  .DATA 10696868
 CONST_10770738:  .DATA 10770738
 CONST_4608131:   .DATA 4608131
 
-bitopResult:     .data 0
-
-tmpA:       .data 0             ;Used by macros
-tmpB:       .data 0             ;Used by macros
-tmpC:       .data 0             ;Used by macros
-
-T:          .data 0
-tokenType:  .data 0     
-tokenValue: .data 0
-tokenAddr:  .data 0
-
+        .include macrotests/vars.inc
 
         .INCLUDE BITOPS.inc
         .include IO.inc

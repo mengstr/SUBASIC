@@ -120,7 +120,6 @@ PrintHex:
         POP @t                          ; Pop off the return address and parameters
         POP @val
         PUSH @t                         ; Push the return address back onto the stack
-
 ; 
 ; We will print the number by subtracting the largest possible power of 16 from the number
 ; and printing the number of times we can subtract it. This process is repeated for all

@@ -7,6 +7,7 @@ cmdNEW:        .proc cmdNEW
 ;-----------------------------------------------------------------------------
 
         CLR program
+        CLR stackVars-1
         JMP Restart
         
         .endp

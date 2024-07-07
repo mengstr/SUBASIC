@@ -27,22 +27,22 @@ debugToken:
 ;    PUSH tokenStr              ;debug
 ;    CALL PrintString           ;debug
 ;    DEBUGPRINT "' Type="       ;debug
-;       CMPNE tokenType CONST_0 @n0  ;debug
+;       CMPNE tokenType TT_EOL @n0  ;debug
 ;       DEBUGPRINT "EOL"        ;debug
 ;       JMP @nn                 ;debug
-;@n0:   CMPNE tokenType CONST_1 @n1  ;debug
+;@n0:   CMPNE tokenType TT_NUMBER @n1  ;debug
 ;       DEBUGPRINT "Num"        ;debug
 ;       JMP @nn                 ;debug
-;@n1:   CMPNE tokenType CONST_2 @n2  ;debug
+;@n1:   CMPNE tokenType TT_VARIABLE @n2  ;debug
 ;       DEBUGPRINT "Var"        ;debug
 ;       JMP @nn                 ;debug
-;@n2:   CMPNE tokenType CONST_3 @n3   ;debug
+;@n2:   CMPNE tokenType TT_KEYWORD @n3   ;debug
 ;       DEBUGPRINT "Keyw"       ;debug
 ;       JMP @nn                 ;debug
-;@n3:   CMPNE tokenType CONST_4 @n4   ;debug
+;@n3:   CMPNE tokenType TT_STRING @n4   ;debug
 ;       DEBUGPRINT "Str"        ;debug
 ;       JMP @nn                 ;debug
-;@n4;   CMPNE tokenType CONST_5 @n5  ;debug
+;@n4;   CMPNE tokenType TT_MISC @n5  ;debug
 ;       DEBUGPRINT "Misc"       ;debug
 ;       JMP @nn                 ;debug
 ;@n5:   DEBUGPRINT "???"        ;debug

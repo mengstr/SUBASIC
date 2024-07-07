@@ -14,14 +14,14 @@ cmdPRINT:       .proc cmdPRINT
 ;
 ;-----------------------------------------------------------------------------
 
-    DEBUGPRINT "cmdPRINT:\r\n"
+    DEBUGPRINT "[cmdPRINT]\r\n"
 
 @loop:
     CMPEQ tokenPeek CONST_0 @doneCrlf       ; If the token is an EOL, we're done
     CMPEQ tokenPeek ASCII_COLON @doneCrlf   ; If the token is an colon, we're done
 
     CALL ParseExpression
-    CMPEQ tokenType CONST_4 @string               ; If the token is a string, print it
+    CMPEQ tokenType TT_STRING @string               ; If the token is a string, print it
     PUSH expression                         ; Else print the integer (constant/variable)
     CALL PrintInteger
     JMP @continue
@@ -37,7 +37,7 @@ cmdPRINT:       .proc cmdPRINT
 
 
 @doneCrlf
-    CMPNE tokenType CONST_5 @crlf
+    CMPNE tokenType TT_MISC @crlf
     CMPEQ tokenValue ASCII_SEMICOLON Statement
 @crlf:
     PRINTCRLF                               ; Else print a CRLF and continue with the next statement
@@ -67,7 +67,7 @@ cmdPRHEX:       .proc cmdPRHEX
     CMPEQ tokenPeek ASCII_COLON @doneCrlf   ; If the token is an colon, we're done
 
     CALL ParseExpression
-    CMPEQ tokenType CONST_4 @string               ; If the token is a string, print it
+    CMPEQ tokenType TT_STRING @string               ; If the token is a string, print it
     PUSH expression                         ; Else print the integer (constant/variable)
     CALL PrintHex
     JMP @continue
@@ -83,7 +83,7 @@ cmdPRHEX:       .proc cmdPRHEX
 
 
 @doneCrlf
-    CMPNE tokenType CONST_5 @crlf
+    CMPNE tokenType TT_MISC @crlf
     CMPEQ tokenValue ASCII_SEMICOLON Statement
 @crlf:
     PRINTCRLF                               ; Else print a CRLF and continue with the next statement

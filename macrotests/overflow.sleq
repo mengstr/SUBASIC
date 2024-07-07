@@ -66,14 +66,7 @@
 
 OVERFLOW:    .data 8388605
 
-tmpA:       .data 0             ;Used by macros
-tmpB:       .data 0             ;Used by macros
-tmpC:       .data 0             ;Used by macros
-
-T:          .data 0
-tokenType:  .data 0     
-tokenValue: .data 0
-tokenAddr:  .data 0
+        .include macrotests/vars.inc
 
         .include IO.inc
         .include CONSTANTS.inc

@@ -56,21 +56,7 @@ TESTNUMSINNER_:         .data TESTNUMSINNER
 TESTNUMSINNER:          .data -2894, -999, -888, -12, -2, -1, 0, 1, 2, 13, 67, 412, 977,2894
                         .data 0x650318
 
-divRemainder:  .data 0          ; Remainder from DIV operation to be used for modulus operations
-
-po:          .data 0
-vo:          .data 0
-pi:          .data 0
-vi:          .data 0
-
-tmpA:       .data 0             ;Used by macros
-tmpB:       .data 0             ;Used by macros
-tmpC:       .data 0             ;Used by macros
-
-T:          .data 0
-tokenType:  .data 0     
-tokenValue: .data 0
-tokenAddr:  .data 0
+        .include macrotests/vars.inc
 
         .include IO.inc
         .include CONSTANTS.inc

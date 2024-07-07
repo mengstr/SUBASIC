@@ -56,21 +56,7 @@ TESTNUMS2_:  .data TESTNUMS2
 TESTNUMS2:   .data -1,-2,-3,-10,-13,-100,-214,-396,-515,-644,-1000,-6821,-22639,-88888,1,2,3,10,13,100,214,396,515,644,1000,6821,22639,88888
              .data 0x650318
 
-divRemainder:  .data 0          ; Remainder from DIV operation to be used for modulus operations
-
-pi:          .data 0
-vi:          .data 0
-po:          .data 0
-vo:          .data 0
-
-tmpA:       .data 0             ;Used by macros
-tmpB:       .data 0             ;Used by macros
-tmpC:       .data 0             ;Used by macros
-
-T:          .data 0
-tokenType:  .data 0     
-tokenValue: .data 0
-tokenAddr:  .data 0
+        .include macrotests/vars.inc
 
         .include IO.inc
         .include CONSTANTS.inc

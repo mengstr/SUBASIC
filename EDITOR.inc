@@ -216,7 +216,7 @@ InsertBlock:
 
         MOV @insLen @cnt
 @fill0Loop:
-        INDEXEDWR CONST_x555 @pD
+        INDEXEDWR CONST_0 @pD
         DEC @pD
         DEC @cnt
         JMPN0 @cnt @fill0Loop

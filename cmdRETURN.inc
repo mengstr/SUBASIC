@@ -8,7 +8,7 @@ cmdRETURN:        .proc cmdRETURN
 ;
 ;-------|-----------------------------------|-------------------------------------
 
-        DEBUGPRINT "cmdRETURN:\r\n"
+        DEBUGPRINT "[cmdRETURN]\r\n"
 
 
         POP pCode                        ; Restore the previous location from the stack  

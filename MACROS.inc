@@ -16,22 +16,22 @@
 
     .macro INDEXEDRD srcP dest   ; Copy [srcP] to dest
         MOV srcP @p
-        CLR dest        ; The next four instructions are a MOV macro expanded here inline
-        CLR T
-@p:     0 T
-        T dest
+        CLR dest
+        CLR tIdx
+@p:     0 tIdx
+        tIdx dest
     .endm
 
 ;--------------------------------------------------------------------------------------------
 
-    .macro INDEXEDWR src destP   ; Copy src to [destP]
+    .macro INDEXEDWR src destP  ; Copy src to [destP]
         MOV destP (@p1+0) 
         MOV destP (@p1+1)
         MOV destP (@p2+1)
-        CLR T
-@p1:    0 0                     ; The next instructions are a MOV macro expanded here inline
-        src T
-@p2     T 0
+        tIdx tIdx               ; T=0
+        src tIdx                ; T=-src
+@p1:    0 0                     ; [destP] = 0
+@p2:    tIdx 0                  ; [destP+1] = T-[destP]
     .endm
 
 ;--------------------------------------------------------------------------------------------

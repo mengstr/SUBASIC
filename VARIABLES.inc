@@ -1,59 +1,11 @@
 
 ;-----------------------------------------------------------------------------
 ; VARIABLES A..Z
-; All single letter variables are stored in the same memory location and are
-; pre-allocated so they don't need to be created with a DIM statement.
 ;-----------------------------------------------------------------------------
 vars1:  .data $+1
-        .data 0,0,0,0,0         ; Variables A..E
-        .data 0,0,0,0,0         ;           F..J
-        .data 0,0,0,0,0         ;           K..O
-        .data 0,0,0,0,0         ;           P..T
-        .data 0,0,0,0,0         ;           U..Y
-        .data 0                 ;           Z
-
-;-----------------------------------------------------------------------------
-; VARIABLES ALLOCATED BY DIM
-;-----------------------------------------------------------------------------
-vars2:  .data $+1
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data "      ",0,0
-        .data 0,0,0,0,0,0,0,0
-        
+        .data 10,20,30,40,50         ; Variables A..E
+        .data 60,70,80,90,100         ;           F..J
+        .data 110,120,130,140,150         ;           K..O
+        .data 160,170,180,190,200         ;           P..T
+        .data 210,220,230,240,250         ;           U..Y
+        .data 260                 ;           Z

@@ -12,7 +12,7 @@
         CLR tmpA
         v tmpA @L2
         JMP @done
-@L2:    PLUS1 tmpA addr
+@L2:    CONST_1 tmpA addr
 @done:
     .endm
 

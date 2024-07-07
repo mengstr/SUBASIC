@@ -2,25 +2,11 @@
 ; CONSTANTS.inc
 ;-----------------------------------------------------------------------------
 
-CONST_NEG3:         .data -2
-CONST_NEG2:         .data -2
-CONST_NEG1:         .data (-1)
-PLUS1:          .data 1 
-MINUS1:         .data (-1)
-CONST_1000:         .data 1000
-CONST_10000:        .data 10000
-CONST_100000:       .data 100000
-CONST_1000000:      .data 1000000
-CONST_32768:        .data 32768
-CONST_65536:        .data 65536
-CONST_xFFFF:        .data 0xFFFF
-CONST_xFF00:        .data 0xFF00
-CONST_xFF:           .data 0xFF
-CONST_x2D:           .data 0x2D
-CONST_x555:         .data 0x555
-CONST_MAXINT        .data 8388607
-
+MINUS1:             .data (-1)
 ASCII_DOUBLEDAGGER: .data 33
+CONST_x2D:          .data 0x2D
+CONST_65536:        .data 65536
+CONST_MAXINT        .data 8388607
 
 Z:                  .equ 0x600000
 
@@ -152,6 +138,7 @@ CONST_124:          .equ 0x60007C
 CONST_125:          .equ 0x60007D
 CONST_126:          .equ 0x60007E
 CONST_127:          .equ 0x60007F
+
 
 ASCII_NUL:          .equ 0x600000
 ASCII_SOH:          .equ 0x600001

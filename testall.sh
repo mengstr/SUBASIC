@@ -32,7 +32,7 @@ ls macrotests | grep .sleq | sed 's/.sleq//' | while read line; do
 
     result=$(  \
         ../SLEQASM/sleqasm.js macrotests/$line.sleq $debug && \
-        ../SLEQASM/subleq macrotests/$line.v20raw -q | \
+        ../SLEQASM/subleq macrotests/$line.v20raw | \
         tr -d '\n' | \
         tr -d '\r' \
     )
@@ -41,10 +41,10 @@ ls macrotests | grep .sleq | sed 's/.sleq//' | while read line; do
         echo -e "\033[0;32mOK\033[0m"
     else
         echo -e "\033[0;31mFAIL\033[0m"
-        if [ ! -z "$test_name" ]; then
+        # if [ ! -z "$test_name" ]; then
             echo -e "\tExpected \'$expected\'"
             echo -e "\tBut got  \'$result\'"
-        fi
+        # fi
 
     fi
 done

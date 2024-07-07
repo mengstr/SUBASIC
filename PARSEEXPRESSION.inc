@@ -10,6 +10,7 @@ expression:     .data 0
 @funcValue:     .data 0
 
 ParseExpression:
+        DEBUGPRINT "[PARSEEXPRESSION]\r\n"
         CLR expression
         CLR @op
         CLR @unaryFlag
@@ -28,20 +29,17 @@ ParseExpression:
         CMPEQ tokenPeek ASCII_CARET @peekOk             ; Operand ^ XOR
         CMPEQ tokenPeek ASCII_PERCENT @peekOk           ; Operand % MODULUS
         
+        DEBUGPRINT "[TOKENPEEK FAIL]\r\n"
         RET
 
 @peekOk:
         MOV pCode @pCodeHold
 
         CALL GetParsedToken
-        CMPEQ tokenType CONST_3 @isKeyword
-
-;       CALL debugToken                 ;debug
-;        PRINTCRLF                      ;debug;
-
-        CMPEQ tokenType CONST_1 @isNum          ; Number
-        CMPEQ tokenType CONST_2 @isVar          ; Variable
-        CMPEQ tokenType CONST_5 @isOp           ; Operand
+        CMPEQ tokenType TT_KEYWORD @isKeyword           ; Keyword
+        CMPEQ tokenType TT_NUMBER @isNum                ; Number
+        CMPEQ tokenType TT_VARIABLE @isVar              ; Variable
+        CMPEQ tokenType TT_MISC @isOp                   ; Operand
         RET
 
 @isKeyword:
@@ -49,8 +47,6 @@ ParseExpression:
         CMPEQ tokenValue kwABS @isABS
         MOV @pCodeHold pCode                    ; If the expression is terminated by a keyword we need to
         RET                                     ; roll back that keyword so it can be processsed properly.
-
-
 
 @isRND:
         CALL GetParsedToken
@@ -105,7 +101,6 @@ ParseExpression:
         JMP @loop
 
 
-
 @isNum:
 @isVar:
 @isFunc:
@@ -120,7 +115,7 @@ ParseExpression:
         CMPEQ @op ASCII_VERTICAL_BAR @or       ; Operand | OR
         CMPEQ @op ASCII_AMPERSAND @and         ; Operand & AND
         CMPEQ @op ASCII_CARET @xor             ; Operand ^ XOR
-        CMPEQ @op ASCII_PERCENT @modulus    ; Operand % MODULUS
+        CMPEQ @op ASCII_PERCENT @modulus       ; Operand % MODULUS
         MOV tokenValue expression
         JMP @loop
 
@@ -150,7 +145,6 @@ ParseExpression:
         MOV divRemainder expression
         CLR @op
         JMP @loop
-
 
 @or:
         PUSH tokenValue

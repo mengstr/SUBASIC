@@ -16,7 +16,7 @@
 FindVariable:
     DEBUGPRINT "[FINDVARIABLE]\r\n"
     MOV stackVars @pVar                         ; Point to the first variable
-    MOV TT_VARIABLE tokenType                       ; Set type to variable tentatively
+    MOV TT_VARINT tokenType                       ; Set type to variable tentatively
     JMP @doFind
 
 FindKeyword:
@@ -28,23 +28,23 @@ FindKeyword:
     POP @t                                      ; Get the key to search for from the stack
     POP @lookFor                                
     PUSH @t
-    DEBUGPRINT "LOOKING FOR '"  ;debug
+;    DEBUGPRINT "LOOKING FOR '"  ;debug
 ;    PUSH @lookFor              ;debug
 ;    CALL PrintString           ;debug
-    DEBUGPRINT "'\r\n"          ;debug
+;    DEBUGPRINT "'\r\n"          ;debug
 
 @loop1:
-    DEBUGPRINT "@pVar="          ;debug
-;    PUSH @pVar                 ;debug
-;    CALL PrintHex              ;debug
-;    OUT ASCII_SPACE            ;debug
+;    DEBUGPRINT "@pVar="         ;xdebug
+;    PUSH @pVar                 ;xdebug
+;    CALL PrintHex              ;xdebug
+;    OUT ASCII_SPACE            ;xdebug
     MOV @lookFor @pLookFor                      ; Point to the key
     INDEXEDRD @pVar @link                       ; Get the link to next variable address
-    DEBUGPRINT "@link="          ;debug
-;    PUSH @link                 ;debug
-;    CALL PrintHex              ;debug
-;    OUT ASCII_SPACE            ;debug
-;    PRINTCRLF                  ;debug
+;   DEBUGPRINT "@link="         ;xdebug
+;    PUSH @link                 ;xdebug
+;    CALL PrintHex              ;xdebug
+;    OUT ASCII_SPACE            ;xdebug
+;    PRINTCRLF                  ;xdebug
 
     JMP0 @link @notFound                        ; If the link is zero, we have reached the end of the list
     MOV @link @pVar                             ; Point to the start of name field
@@ -92,8 +92,14 @@ FindKeyword:
 @px:         .data 0
 @ch:        .data 0
 @pTs:       .data 0         ; Pointer to the token string
+@t:        .data 0
+
 
 InsertVar:
+        POP @t
+        POP @dataLen
+        PUSH @t
+
         CLR @nameLen
         MOV tokenStr @pTs
 @lenLoop:
@@ -107,7 +113,10 @@ InsertVar:
 ;        DEBUGPRINT "[INSERTVAR] '"     ;debug
 ;       PUSH tokenStr                   ;debug
 ;       CALL PrintString                ;debug
-;        DEBUGPRINT "' Length="         ;debug
+;        DEBUGPRINT "' DataLen="        ;debug
+;       PUSH @dataLen                   ;debug
+;       CALL PrintInteger               ;debug
+;        DEBUGPRINT "' NameLen="        ;debug
 ;       PUSH @nameLen                   ;debug
 ;       CALL PrintInteger               ;debug
 ;       PRINTCRLF                       ;debug
@@ -145,8 +154,13 @@ InsertVar:
         INC @pTs
         JMPN0 @ch @copyNameLoop
 
+
+@initDataLoop:
         INC @px
-        INDEXEDWR CONST_8 @px                        ; Write the data
+        INDEXEDWR CONST_0 @px                        ; Write the data
+        DEC @dataLen
+        JMPN0 @dataLen @initDataLoop
+
         INC @px
         INDEXEDWR @link @px                          ; Write the link
 
@@ -155,7 +169,6 @@ InsertVar:
     .endp
 
 
-        .org $+1024                              ; Reserve space for the stack    
 SP:     .data 0                                  ; Stackpointer
         .org $+1024                              ; Reserve space for the stack    
 stack_:

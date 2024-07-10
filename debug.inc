@@ -33,7 +33,7 @@ debugToken:
 ;@n0:   CMPNE tokenType TT_NUMBER @n1  ;debug
 ;       DEBUGPRINT "Num"        ;debug
 ;       JMP @nn                 ;debug
-;@n1:   CMPNE tokenType TT_VARIABLE @n2  ;debug
+;@n1:   CMPNE tokenType TT_VARINT @n2  ;debug
 ;       DEBUGPRINT "Var"        ;debug
 ;       JMP @nn                 ;debug
 ;@n2:   CMPNE tokenType TT_KEYWORD @n3   ;debug

@@ -232,15 +232,17 @@ msgCtrlC:               .data $+1, "\r\n\r\nHalt by ^C\r\n", 0
 
 
 program:                                ; The program source code to be run
-L10: .data 10, L20-$-1, "DIM ABC,DEF"    ,0      
-L20: .data 20, Lend-$-1, "PRINT ABC+DEF"                         ,0
+L10: .data 10, L20-$-1,  "DIM APA$,BANAN$"               ,0      
+L20: .data 20, L30-$-1,  "LET APA$=\"Hello World!\""     ,0
+L30: .data 30, Lend-$-1, "PRINT APA$"                    ,0
+
+
+Lend:.data 0
 
 ;        .include macrotests/testcasegen/multest.inc
 ;        .include macrotests/testcasegen/divtest.inc
 
-Lend:.data 0
-
-        .org $+16384               ; Reserve 4K for the BASIC Source code
+        .org $+16384               ; Reserve 16K for the BASIC Source code
 
 
 ;-----------------------------------------------------------------------------

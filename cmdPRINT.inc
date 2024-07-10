@@ -21,9 +21,15 @@ cmdPRINT:       .proc cmdPRINT
     CMPEQ tokenPeek ASCII_COLON @doneCrlf   ; If the token is an colon, we're done
 
     CALL ParseExpression
-    CMPEQ tokenType TT_STRING @string               ; If the token is a string, print it
+    CMPEQ tokenType TT_STRING @string       ; If the token is a string, print it
+    CMPEQ tokenType TT_VARSTR @varstring    ; If the token is a string variable , print it
     PUSH expression                         ; Else print the integer (constant/variable)
     CALL PrintInteger
+    JMP @continue
+
+@varstring:
+    PUSH tokenAddr
+    CALL PrintString
     JMP @continue
 
 @string:

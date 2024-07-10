@@ -2,7 +2,7 @@
 cmdNEW:        .proc cmdNEW
 ;-----------------------------------------------------------------------------
 ;
-; Removes all the current source code
+; Removes all the current source code and variables from memory.
 ;
 ;-----------------------------------------------------------------------------
 

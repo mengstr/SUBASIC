@@ -55,16 +55,18 @@
 
 TT_EOL:           .equ CONST_0
 TT_NUMBER:        .equ CONST_1
-TT_VARIABLE:      .equ CONST_2
-TT_KEYWORD:       .equ CONST_3
-TT_STRING:        .equ CONST_4
-TT_MISC:          .equ CONST_5
-TT_NOTFOUND:      .equ CONST_6
+TT_VARINT:        .equ CONST_2
+TT_VARSTR:        .equ CONST_3
+TT_KEYWORD:       .equ CONST_4
+TT_STRING:        .equ CONST_5
+TT_MISC:          .equ CONST_6
+TT_NOTFOUND:      .equ CONST_7
 
-tokenType:  .data 0     
-tokenValue: .data 0
-tokenAddr:  .data 0
-tokenPeek:  .data 0
+tokenType:        .data 0     
+tokenValue:       .data 0
+tokenAddr:        .data 0
+tokenPeek:        .data 0
+varIsString:      .data 0
 
 tokenStr:   .data $+1
             .data 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -160,7 +162,8 @@ GetParsedToken:
             RET
 
 
-@kwVar:     JBETWEEN ch ASCII_a ASCII_z @lc
+@kwVar:     CLR varIsString                           ; Set variable as normal integer
+@kwVarLoop: JBETWEEN ch ASCII_a ASCII_z @lc
             JMP @uc
 @lc:        SUB CONST_32 ch
 @uc:        INDEXEDWR ch pTokenStr                    ; Append character to string
@@ -169,11 +172,20 @@ GetParsedToken:
             INC pCode                                 ; Get the next character
             INDEXEDRD pCode ch
 
-            JBETWEEN ch ASCII_A ASCII_Z @kwVar        ; Keep collecting as long we have A-Z, a-z 0-9 or underscore 
-            JBETWEEN ch ASCII_a ASCII_z @kwVar  
-            JBETWEEN ch ASCII_0 ASCII_9 @kwVar      
-            CMPEQ ch ASCII_UNDERSCORE @kwVar      
+            JBETWEEN ch ASCII_A ASCII_Z @kwVarLoop    ; Keep collecting as long we have A-Z, a-z 0-9 or underscore 
+            JBETWEEN ch ASCII_a ASCII_z @kwVarLoop  
+            JBETWEEN ch ASCII_0 ASCII_9 @kwVarLoop      
+            CMPEQ ch ASCII_UNDERSCORE @kwVarLoop      
+            CMPEQ ch ASCII_DOLLAR @kwVarDollar        ; We also allow dollar sign in variable names, but that will
+            JMP @kwVarDone                            ; terminate the variable name
 
+@kwVarDollar:
+            INDEXEDWR ch pTokenStr                    ; Append character to string
+            INC pTokenStr
+            INC pCode
+            INC varIsString                           ; Set variable type as string
+
+@kwVarDone:
             INDEXEDWR CONST_0 pTokenStr               ; Terminate the collected tokenString
 
             CALL SkipSpaces                           ; Skip trailing spaces
@@ -195,17 +207,22 @@ GetParsedToken:
             ; It is a variable
             ;
 @notAKeyword:
-            JMP0 tokenStr+2 @is1CharVar         ; If the token is a single character, then it is a predefined variable
+            JMP0 tokenStr+2 @is1CharVar         ; If the token is a single character, then it is a predefined plain integer variable
 
             ;
             ; Check for long variable name
             ;
+            MOV TT_VARINT tokenType           ; Return with type as Variable 
             PUSH tokenStr
             CALL FindVariable
             CMPEQ tokenType TT_NOTFOUND @notVariable
+            JMP0 varIsString @doneVar
+            MOV TT_VARSTR tokenType           ; Return with type as String Variable 
             JMP @doneVar
 
+
 @is1CharVar:
+            MOV TT_VARINT tokenType           ; Return with type as Integer Variable 
             MOV tokenStr+1 @p                   ; Get the variable name
             SUB ASCII_A @p                      ; Variable A is the first one so we need to offset the pointer
             ADD vars1 @p                        ; Offset to the beginning of the variable table
@@ -216,7 +233,6 @@ GetParsedToken:
             CALL SkipSpaces                     ; Skip trailing spaces
             MOV ch tokenPeek                    ; Store the next non-space character as peek
             CLR tokenMode                       ; Reset the tokenMode
-            MOV TT_VARIABLE tokenType           ; Return with type as Variable (2)
             RET
 
 

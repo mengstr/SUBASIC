@@ -38,7 +38,7 @@ ParseExpression:
         CALL GetParsedToken
         CMPEQ tokenType TT_KEYWORD @isKeyword           ; Keyword
         CMPEQ tokenType TT_NUMBER @isNum                ; Number
-        CMPEQ tokenType TT_VARIABLE @isVar              ; Variable
+        CMPEQ tokenType TT_VARINT @isVar              ; Variable
         CMPEQ tokenType TT_MISC @isOp                   ; Operand
         RET
 

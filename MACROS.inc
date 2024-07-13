@@ -36,6 +36,44 @@
 
 ;--------------------------------------------------------------------------------------------
 
+    .macro INDEXEDCP srcP destP  ; Copy [srcP] to [destP]
+    .endm        
+
+
+;;; ; Add a to b
+;;; .macro      add   a b
+;;;             sble  a z
+;;;             sble  z b
+;;;             sble  z z
+;;; .endm
+;;; 
+;;; ; Copy value at src to dest
+;;; .macro      copy  src dest
+;;;             sble  dest dest
+;;;             add   src dest
+;;; .endm
+;;; 
+
+;;; ; Copy value pointed to by 'srcPtr' to address pointed to by 'destPtr'
+;;; ; TODO: Rename
+;;; .macro      copy_pp srcPtr destPtr
+;;;             copy  destPtr cpyWord
+;;;             copy  destPtr cpyWord+1
+;;;             copy  srcPtr  cpyWord+3
+;;;             copy  destPtr cpyWord+7
+;;; 
+;;;             ; Copy a word from src to dest
+;;; cpyWord:    sble  0 0
+;;;             sble  0 z
+;;;             sble  z 0
+;;;             sble  z z
+;;; .endm
+;;; 
+;;; 
+
+
+;--------------------------------------------------------------------------------------------
+
     .macro DEBUGPRINT str
 ;        PUSH cyan                   ;debug
 ;        CALL PrintString           ;debug

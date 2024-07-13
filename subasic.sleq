@@ -151,8 +151,6 @@ notMisc:
         JMP SyntaxError
 
 
-
-
 ;-----------------------------------------------------------------------------
 ; MESSAGE STRINGS
 ;-----------------------------------------------------------------------------
@@ -232,9 +230,12 @@ msgCtrlC:               .data $+1, "\r\n\r\nHalt by ^C\r\n", 0
 
 
 program:                                ; The program source code to be run
-L10: .data 10, L20-$-1,  "DIM APA$,BANAN$"               ,0      
-L20: .data 20, L30-$-1,  "LET APA$=\"Hello World!\""     ,0
-L30: .data 30, Lend-$-1, "PRINT APA$"                    ,0
+L10: .data 10, L20-$-1,  "DIM ARR(10)"          ,0      
+L20: .data 20, L30-$-1,  "LET ARR(5)=17"        ,0
+L30: .data 30, L40-$-1,  "FOR I=0 to 10"        ,0
+L40: .data 40, L50-$-1,  "PRINT I;\" \";ARR(I)" ,0
+L50: .data 50, L60-$-1,  "NEXT"                 ,0
+L60: .data 60, Lend-$-1, "END"                  ,0
 
 
 Lend:.data 0

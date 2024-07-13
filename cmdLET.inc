@@ -16,7 +16,10 @@ cmdLET:        .proc cmdLET
 
         CALL GetParsedToken                 ; Get the equals sign
 
-        CALL ParseExpression                ; Get the value expression
+        DEBUGPRINT "[cmdLET calling ParseExpression]\r\n"
+       CALL ParseExpression                ; Get the value expression
+        DEBUGPRINT "[cmdLET returned from ParseExpression]\r\n"
+
 ;       DEBUGPRINT "tokenType="             ;debug
 ;       PUSH tokenType                      ;debug
 ;       CALL PrintInteger                   ;debug

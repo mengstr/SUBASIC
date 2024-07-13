@@ -98,10 +98,11 @@ FindKeyword:
 InsertVar:
         POP @t
         POP @dataLen
+        POP @pTs
         PUSH @t
 
         CLR @nameLen
-        MOV tokenStr @pTs
+;        MOV tokenStr @pTs
 @lenLoop:
         INDEXEDRD @pTs @ch
         CMPEQ @ch CONST_0 @lenDone
@@ -201,6 +202,7 @@ kwPRHEX:          .equ CONST_18
 kwRND:            .equ CONST_19
 kwABS:            .equ CONST_20
 kwDIM:            .equ CONST_21
+kwSQRT:           .equ CONST_22
 
 kwnREM:            .equ 1
 kwnLET:            .equ 2
@@ -223,6 +225,7 @@ kwnPRHEX:          .equ 18
 kwnRND:            .equ 19
 kwnABS:            .equ 20
 kwnDIM:            .equ 21
+kwnSQRT:           .equ 22
 
                 .data 0
 linkREM:        .data "REM"   ,0, kwnREM,    linkREM
@@ -246,6 +249,7 @@ linkPRHEX:      .data "PRHEX" ,0, kwnPRHEX,  linkPRHEX
 linkRND:        .data "RND"   ,0, kwnRND,    linkRND
 linkABS:        .data "ABS"   ,0, kwnABS,    linkABS
 linkDIM:        .data "DIM"   ,0, kwnDIM,    linkDIM
+linkSQRT:       .data "SQRT"  ,0, kwnSQRT,   linkSQRT
 
 stackKW:        .data $-1
 

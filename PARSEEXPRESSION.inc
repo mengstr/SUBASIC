@@ -29,7 +29,10 @@ ParseExpression:
         CMPEQ tokenPeek ASCII_CARET @peekOk             ; Operand ^ XOR
         CMPEQ tokenPeek ASCII_PERCENT @peekOk           ; Operand % MODULUS
         
-        DEBUGPRINT "[TOKENPEEK FAIL]\r\n"
+;       DEBUGPRINT "[TOKENPEEK FAIL] got " ;debug
+;       PUSH tokenPeek                      ;debug
+;       CALL PrintInteger                   ;debug
+;       PRINTCRLF                           ;debug
         RET
 
 @peekOk:
@@ -38,13 +41,14 @@ ParseExpression:
         CALL GetParsedToken
         CMPEQ tokenType TT_KEYWORD @isKeyword           ; Keyword
         CMPEQ tokenType TT_NUMBER @isNum                ; Number
-        CMPEQ tokenType TT_VARINT @isVar              ; Variable
+        CMPEQ tokenType TT_VARINT @isVar                ; Variable
         CMPEQ tokenType TT_MISC @isOp                   ; Operand
         RET
 
 @isKeyword:
         CMPEQ tokenValue kwRND @isRND
         CMPEQ tokenValue kwABS @isABS
+        CMPEQ tokenValue kwSQRT @isSQRT
         MOV @pCodeHold pCode                    ; If the expression is terminated by a keyword we need to
         RET                                     ; roll back that keyword so it can be processsed properly.
 
@@ -62,6 +66,65 @@ ParseExpression:
 
         MOV @funcValue tokenValue
         JMP @isFunc
+
+@isSQRT:
+        CALL GetParsedToken
+        CMPNE tokenValue ASCII_LEFT_PAREN SyntaxError
+
+        CALL GetParsedToken
+        MOV tokenValue @funcValue 
+
+;;; FUNCTION IntegerSqrt(N)
+;;;     DIM guess AS INTEGER
+;;;     DIM last_guess AS INTEGER
+;;;     guess = N / 2  ' Initial guess
+;;;     last_guess = 0
+;;; 
+;;;     IF N = 0 THEN
+;;;         IntegerSqrt = 0
+;;;         EXIT FUNCTION
+;;;     END IF
+;;; 
+;;;     WHILE ABS(guess - last_guess) > 1
+;;;         last_guess = guess
+;;;         guess = (guess + N / guess) / 2  ' Babylonian method iteration
+;;;     WEND
+;;; 
+;;;     ' Ensure the result is correct by checking the guess and the next integer
+;;;     IF (guess + 1) * (guess + 1) <= N THEN
+;;;         guess = guess + 1
+;;;     END IF
+;;; 
+;;;     IntegerSqrt = guess
+;;; END FUNCTION
+;;; 
+        DIV CONST_2 @funcValue  ; Initial guess. funcValue=funcValue/2
+        CLR @last_x
+
+sqrtLoop:
+        SUB @funcValue @last_x
+;       PUSH @last_x
+;       CALL PrintInteger
+;       PRINTCRLF
+        JBETWEEN @last_x MINUS1 CONST_1 @sqrtDone
+        MOV @funcValue @last_x                ; last_x = x
+
+        MOV tokenValue @foo     
+        DIV @funcValue @foo
+        MOV @foo @funcValue
+
+        ADD @last_x @funcValue 
+        DIV CONST_2 @funcValue
+        JMP sqrtLoop
+
+@sqrtDone:
+
+        CALL GetParsedToken
+        CMPNE tokenValue ASCII_RIGHT_PAREN SyntaxError
+
+        MOV @funcValue tokenValue
+        JMP @isFunc
+
 
 @isABS:
         CALL GetParsedToken
@@ -173,5 +236,7 @@ ParseExpression:
 @unaryFlag: .data 0
 @pCodeHold: .data 0                     ; To back up to the previous token when required
 @tmp:       .data 0
+@last_x:    .data 0
+@foo:       .data 0
 
     .endp
